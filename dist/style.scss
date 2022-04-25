@@ -1,0 +1,372 @@
+@import "./_var";
+
+/*
+HEADER
+*/
+.h{
+    &2{
+        img{
+            height: 45px;
+            width: auto;
+        }
+    }
+}
+
+/*
+DISPLAY
+*/
+.grid{
+    &-side{
+        display: grid;
+        grid-template-columns: 2rem 1fr;
+    }
+    &-2column{
+        display: block;
+        @include mq(md){
+            display: grid;
+            grid-template-columns: 55fr 45fr;
+            gap: $margin-lm;
+        }
+        &-11{
+            display: block;
+            @include mq(md){
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: $margin-lm;
+            }
+        }
+    }
+    &-2row{
+        &-82{
+            display: grid;
+            grid-template-rows: 8fr 2fr;
+        }
+    }
+}
+
+.flex{
+    &-align{
+        &-center{
+            display: flex;
+            align-items: center;
+            align-content: center;
+        }
+    }
+    &-justify{
+        &-center{
+            display: flex;
+            justify-content: center;
+        }
+        &-between{
+            display: flex;
+            justify-content: space-between;
+        }
+        &-around{
+            display: flex;
+            justify-content: space-around;
+        }
+    }
+    &-wrap{
+        flex-wrap: wrap;
+    }
+}
+
+.d-none{
+    display: none!important;
+} 
+
+/*
+BACKGROUND
+*/
+.bg{
+    &-default{
+        background: no-repeat center/cover url("./img/bg.png");
+    }
+    &-gray{
+        background-color: $dark-grey;
+    }
+    &-white{
+        background-color: $white;
+    }
+}
+
+/*
+POSITION
+*/
+
+.relative{
+    position: relative;
+}
+
+.absolute{
+    position: absolute;
+    &-center{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    &-center-x{
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+.fixed{
+    position: fixed;
+}
+
+.translate{
+    &-center{
+        transform: translate(-50%, -50%);
+    }
+}
+
+$pos: "top", "left", "right", "bottom";
+
+@each $p in $pos{
+    .#{$p}{
+        @for $i from 0 to 21{
+            &-#{$i*5}{
+                #{$p}: #{$i*5}#{"%"};
+            }
+        }
+    }
+}
+
+
+/*
+SIZE
+*/
+.w{
+    &-mx{
+        @for $i from 0 to 11{
+            &-#{$i*50}{
+                max-width: #{$i*50}px;
+            }
+        }
+    }
+    @for $i from 0 to 11{
+        &-#{$i*10}{
+            width: #{$i*10}#{"%"};
+        }
+    }
+}
+
+.h{
+    &-mx{
+        @for $i from 0 to 11{
+            &-#{$i*50}{
+                max-width: #{$i*50}px;
+            }
+        }
+    }
+    @for $i from 0 to 11{
+        &-#{$i*10}{
+            height: #{$i*10}#{"%"};
+        }
+        &-md{
+            @include mq(md){
+                &-#{$i*10}{
+                    height: #{$i*10}#{"%"};
+                }
+            }
+        }
+    }
+    @for $i from 0 to 11{
+        &-v#{$i*10}{
+            height: #{$i*10}#{"vh"};
+        }
+    }
+    @for $i from 0 to 51{
+        &-p#{$i*10}{
+            height: #{$i*10}#{"px"};
+        }
+        &-md{
+            &-p#{$i*10}{
+                @include mq(md){
+                    height: #{$i*10}#{"px"};
+                }
+            }
+        }
+    }
+}
+
+/*
+TEXT
+*/
+.font{
+    &-s{
+        font-size: $font-s;
+    }
+    &-m{
+        font-size: $font-m;
+    }
+    &-lm{
+        font-size: $font-lm;
+    }
+    &-l{
+        font-size: $font-l;
+    }
+    &-xl{
+        font-size: $font-xl;
+    }
+    &-weight{
+        @for $i from 1 to 10{
+            &-#{$i*100}{
+                font-weight: #{$i*100};
+            }
+        }
+    }
+    &-serif{
+        font-family: 'Noto Serif', "Times New Roman", "YuMincho", "Hiragino Mincho ProN", "Yu Mincho", "MS PMincho", serif;
+    }
+}
+
+.text{
+    &-center{
+        text-align: center;
+    }
+    &-rotate{
+        &-90{
+            transform: rotate(-90deg) translateX(-100%);
+            transform-origin: top left;
+            width: fit-content;
+        }
+    }
+    &-scroll{
+        min-height: 200px;
+        overflow-y: scroll;
+        position: relative;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        word-break: break-all;
+        &::-webkit-scrollbar {  /* Chrome, Safari 対応 */
+            display:none;
+        }
+        @include mq(md){
+            min-height: 300px;
+        }
+        .text{
+            width: calc(100% - 5px);
+        }
+    }
+}
+
+.scrollbar{
+    display: block;
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    top: 0;
+    width: 2px;
+    background-color: $grey;
+    .thumb{
+        width: 100%;
+        background-color: $blue;
+        position: absolute;
+    }
+}
+
+.icon{
+    &-circle{
+        color: $black;
+        background-color: $white;
+        font-size: $font-lm;
+        width: $font-l;
+        height: $font-l;
+        border-radius: 100%;
+        position: relative;
+        &::before{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+/*
+MARGIN
+*/
+@mixin margins($pos) {
+    &-0{
+        margin-#{$pos}: 0;
+    }
+    &-1{
+        margin-#{$pos}: 0.75rem;
+    }
+    &-2{
+        margin-#{$pos}: 1rem;
+    }
+    &-3{
+        margin-#{$pos}: 2.5rem;
+    }
+    &-4{
+        margin-#{$pos}: 4rem;
+    }
+    &-5{
+        margin-#{$pos}: 7rem;
+    }
+}
+
+
+.m{
+    &b{
+        @include margins("bottom");
+        &-md{
+            @include mq(md){
+                @include margins("bottom");
+            }
+        }
+    }
+    &r{
+        @include margins("right");
+    }
+    &l{
+        @include margins("left");
+    }
+}
+
+/*
+IMAGE
+*/
+.img{
+    &-fluid{
+        width: 100%;
+        height: auto;
+    }
+    &-cover{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+/*
+IFRAME
+*/
+.iframe{
+    &-43{
+        position: relative;
+        width: 100%;
+        padding-top: 75%;
+        iframe{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+    &-md{
+        &-100{
+            @include mq(md){
+                padding-top: auto;
+                height: 100%;
+            }
+        }
+    }
+}
