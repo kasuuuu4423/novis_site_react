@@ -58,11 +58,12 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
             setDescHeight(boxRef?.current.clientHeight);
             setTextHeight(textRef?.current.clientHeight);
             boxRef.current.addEventListener("scroll", isScroll, {passive: true});
-            window.addEventListener("load", isLoad);
+            isLoad();
+            //window.addEventListener("load", isLoad);
             window.addEventListener("resize", isResize);
             return ()=>{
                 boxRef.current.removeEventListener("scroll", isScroll);
-                window.removeEventListener("load", isLoad);
+                //window.removeEventListener("load", isLoad);
                 window.removeEventListener("resize", isResize);
             }
         }
