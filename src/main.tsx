@@ -11,11 +11,12 @@ import Place from './Components/Main/Place';
 import Plan from './Components/Main/Plan';
 import Flow from './Components/Main/Flow';
 import Contact from './Components/Main/Contact';
+import Dashboard from './Dashboard';
 import { useInView } from 'react-intersection-observer';
-import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore/lite';
-import { firebaseConfig } from './config';
-import { getInstructors } from './Modules/Firebase';
+import { getDocsFromDb, getDocFromDb, getInstructors } from './Modules/Firebase';
+import { BrowserRouter,  Route } from 'react-router-dom';
+import { db } from './Modules/Firebase';
+
 
 
 const Container = styled.div`
@@ -54,12 +55,34 @@ type AppProps = {
 
 const App: React.FC<AppProps> = (props) =>{
     const [instructors, setInstructors] = useState([]);
-    const firebaseApp = initializeApp(firebaseConfig);
-    const db = getFirestore(firebaseApp);
+    const [about, setAbout] = useState("");
+    const [courses, setCourses] = useState([]);
+    const [plans, setPlans] = useState({});
+    const [plansOrgn, setPlansOrgn] = useState([]);
 
     useEffect(()=>{
-        getInstructors(db, (list) =>{
+        getDocsFromDb(db, "instructor", (list) =>{
             setInstructors(list);
+            const pd = list.map((inst: {[key: string]: string})=>{
+                return [inst.name, inst.plan_description];
+            });
+            setCourses(pd);
+        });
+        getDocFromDb(db, "contents", "siteinfo", (doc) =>{
+            setAbout(doc.about);
+            document.title = doc.title;
+        });
+        getDocsFromDb(db, "plans",  (doc) =>{
+            let p = {};
+            doc.forEach((plan: {[key: string]: string | number}) =>{
+                if(!Array.isArray(p[plan.instructor])) p[plan.instructor] = [];
+                p[plan.instructor].push({
+                    price: plan.price,
+                    text: plan.text,
+                });
+            });
+            setPlansOrgn(doc);
+            setPlans(p);
         });
     }, []);
 
@@ -77,22 +100,29 @@ const App: React.FC<AppProps> = (props) =>{
         <section ref={inViews[0][0]} className="top relative bg-default"><img className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
             <div className="absolute-center-x top-80 font-m font-weight-100">Beatbox Lesson Studio</div>
         </section>,
-        <About inViews={inViews[1]}/>,
+        <About text={about} inViews={inViews[1]}/>,
         <Instructor instructors={instructors} inViews={inViews[2]}/>,
-        <Plan inViews={inViews[3]}/>,
+        <Plan course={courses} plans={plans} inViews={inViews[3]}/>,
         <Flow inViews={inViews[4]}/>,
         <Place inViews={inViews[5]}/>,
         <Contact inViews={inViews[6]}/>,
     ];
 
     return (
-        <Container>
-            <Header inViews={inViews} />
-            <main>
-                {sections}
-            </main>
-        </Container>
+        <BrowserRouter>
+            <Route exact path="/">
+                <Container>
+                    <Header inViews={inViews} />
+                    <main>
+                        {sections}
+                    </main>
+                </Container>
+            </Route>
+            <Route path="/dashboard">
+                <Dashboard about={about} plans={plansOrgn} instructors={instructors} course={courses}/>
+            </Route>
+        </BrowserRouter>
     );
 }
 
-ReactDOM.render(<App/>, document.querySelector('#app'));
+ReactDOM.render(<App key="Novis"/>, document.querySelector('#app'));

@@ -9,6 +9,7 @@ import Colors from '../../../Cssvars/Colors';
 type InstructorPersonProps = {
     id: number,
     name: string,
+    imgPath: string,
     description: string,
     twitterId: string,
     instagramId: string,
@@ -68,7 +69,7 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
     }, [boxRef, textRef]);
 
     return (
-        <div className="instrctr grid-2column" id={"instructor_"+props.id}>
+        <div className="instrctr grid-2column mb-5" id={"instructor_"+props.id}>
             <div className="grid-side mb-3 mb-md-0">
                 <div className="side">
                 <div className="text-rotate-90 font-xl font-weight-500">{props.name}</div>
@@ -77,7 +78,8 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
                     <div className="dot"></div>
                     <div className="dot"></div>
                 </div>
-                </div><img className="img-cover" src={"./img/instructor_"+ props.id +".png"} alt={props.name}/>
+                </div>
+                <img loading='lazy' className="img-cover" src={props.imgPath} alt={props.name}/>
             </div>
             <div className="info">
                 <div ref={boxRef} className="font-serif text-scroll h-p300 h-md-p500 mb-3">

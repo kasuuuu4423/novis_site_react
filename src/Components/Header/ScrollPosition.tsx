@@ -30,7 +30,7 @@ const ScrollPosition: React.FC<ScrollPositionProps> = (props) =>{
     let lines: Array<JSX.Element> = [];
     for(let i = 0; i < props.inViews.length; i++){
         const isInView = props.inViews[i][1] ? "active" : "";
-        lines.push(<div className={'line ' + isInView}></div>);
+        lines.push(<div key={i} className={'line ' + isInView}></div>);
     }
     return(
         <Wrap>
