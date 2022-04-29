@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense, useCallback } from 'react';
 import styled from '@emotion/styled';
 import { useTexture } from '@react-three/drei';
 import { Canvas, useLoader } from '@react-three/fiber';
@@ -21,6 +21,7 @@ import { map } from "../../Modules/functions";
 type ParticleProps = {
     position: [number, number, number],
     offsetDefault: [number, number, number],
+    opacity: number,
     id: number,
 };
 const Particle: React.FC<ParticleProps> = (props) =>{
@@ -45,7 +46,7 @@ const Particle: React.FC<ParticleProps> = (props) =>{
     const pos = new Vector3(props.position[0]+(offset[0]/10), props.position[1]+(offset[1]/3*props.offsetDefault[1]), props.position[2]+(offset[2]/10));
     return (
         <sprite position={pos} scale={new Vector3(3, 3, 1)}>
-            <spriteMaterial attach='material' transparent map={tex} />
+            <spriteMaterial opacity={props.opacity} attach='material' transparent map={tex} />
         </sprite>
     );
 }
@@ -69,12 +70,21 @@ const Background: React.FC<BackgroundProps> = (props) =>{
         [-2*map(windowWidth, 1, 2000, 0, 2), 0, 1.2],
     ];
     const  [offsets, setOffset] = useState([]);
+    const [opacity, setOpacity] = useState(0);
+    const isScroll = useCallback(()=>{
+        const scroll = window.pageYOffset;
+        setOpacity(scroll/1000 > 1 ? 1 : scroll/1000);
+    }, []);
     useEffect(()=>{
         const o = [];
         for(let i = 0; i < positions.length; i++){
             o.push([0, Math.random(), 0]);
         }
         setOffset(o);
+        window.addEventListener('scroll', isScroll);
+        return(()=>{
+            window.removeEventListener('scroll', isScroll);
+        });
     }, []);
 
     return(
@@ -84,7 +94,7 @@ const Background: React.FC<BackgroundProps> = (props) =>{
                 <ambientLight intensity={0.5} />
                 {/* <directionalLight color="white" position={[0, 0, 5]} /> */}
                 <Suspense fallback={null}>
-                    {positions.map(((pos, i)=><Particle id={i} offsetDefault={offsets[i]} position={pos}/>))}
+                    {positions.map(((pos, i)=><Particle opacity={opacity} key={i} id={i} offsetDefault={offsets[i]} position={pos}/>))}
                 </Suspense>
             </Canvas>
         </Wrap>
