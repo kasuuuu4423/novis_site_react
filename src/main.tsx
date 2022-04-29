@@ -11,6 +11,7 @@ import Place from './Components/Main/Place';
 import Plan from './Components/Main/Plan';
 import Flow from './Components/Main/Flow';
 import Contact from './Components/Main/Contact';
+import Background from './Components/Main/Background';
 import Dashboard from './Dashboard';
 import { useInView } from 'react-intersection-observer';
 import { getDocsFromDb, getDocFromDb, getInstructors } from './Modules/Firebase';
@@ -20,7 +21,7 @@ import { db } from './Modules/Firebase';
 
 
 const Container = styled.div`
-    background: ${Colors.BLACK};
+    //background: ${Colors.BLACK};
     color: ${Colors.WHITE};
     font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "HiraKakuProN-W3", "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, "BIZ UDPGothic", sans-serif;
     font-weight: 200;
@@ -52,6 +53,10 @@ const Container = styled.div`
 
 type AppProps = {
 };
+
+const BG = styled.img`
+    mix-blend-mode: lighten;
+`;
 
 const App: React.FC<AppProps> = (props) =>{
     const [instructors, setInstructors] = useState([]);
@@ -97,7 +102,9 @@ const App: React.FC<AppProps> = (props) =>{
         });
     }
     const sections = [
-        <section ref={inViews[0][0]} className="top relative bg-default"><img className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
+        <section ref={inViews[0][0]} className="top relative">
+            <BG className='absolute-center' src="./img/bg.png" alt="" />
+            <img className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
             <div className="absolute-center-x top-80 font-m font-weight-100">Beatbox Lesson Studio</div>
         </section>,
         <About text={about} inViews={inViews[1]}/>,
@@ -121,6 +128,7 @@ const App: React.FC<AppProps> = (props) =>{
             <Route path="/dashboard">
                 <Dashboard about={about} plans={plansOrgn} instructors={instructors} course={courses}/>
             </Route>
+            <Background/>
         </BrowserRouter>
     );
 }
