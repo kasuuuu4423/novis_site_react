@@ -25,29 +25,12 @@ const Configuration: React.FC<ConfigProps> = (props) =>{
     const instructorKeys = instructors.map((item) =>{
         return item.name;
     });
-    console.log(props.siteinfo.plans);
     
     return(
         <CustomContainer maxWidth="sm">
             <ConfigCard title='About' dbInfo={{collection: "contents", document: ["siteinfo"]}} defaults={[{about: replaceAllReturns(props.siteinfo.about)}]}/>
             <ConfigCard title='Instructor' dbInfo={{collection: "instructor", document: instructorKeys}} defaults={instructors} />
             <ConfigCard ids={plans.map(item=>item.id)} title='Course' dbInfo={{collection: "plans", document: instructorKeys}} defaults={plans.map(item=>item.data)} />
-
-            {/* <ConfigCard title='Course' content={
-                <Box sx={{
-                    margin: "auto",
-                    padding: 4,
-                    paddingTop: 0,
-                }}>
-                    {props.siteinfo.plans?props.siteinfo.plans.map((plan)=>{
-                        return(
-                            <CustomBox key={plan.instructor + " " + plan.text} content={
-                                <TextField fullWidth label={plan.instructor + " " + plan.text} defaultValue={plan.price}/>
-                            }/>
-                        );
-                    }):""}
-                </Box>
-            }/> */}
         </CustomContainer>
     );
 }

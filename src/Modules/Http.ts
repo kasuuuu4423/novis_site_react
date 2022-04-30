@@ -5,7 +5,6 @@ class Http{
         axios.get(url, {params: param})
             .then(res => {
                 const data = res.data;
-                //console.log(data);
                 callback(res.data);
             });
     }

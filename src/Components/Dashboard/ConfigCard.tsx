@@ -18,7 +18,6 @@ const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
     let countData = 0;
     const refs: Array<React.MutableRefObject<HTMLInputElement>> = [];
     let keys = [[],[]];
-    console.log(props.ids);
     
     const buttonOnClick = () =>{
         for(let i = 0; i < refs.length; i++){
@@ -47,7 +46,6 @@ const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
             {props.defaults ? props.defaults.map((d)=>{
                 const fields: Array<JSX.Element> = [];
                 for(const [key, value] of Object.entries(d)){
-                    console.log(typeof value == "string" ? "text" : "numeric");
                     fields.push(
                         <CustomBox content={
                             <TextField type={typeof value == "string" ? "text" : "number"} inputRef={refs[countData]} multiline={value.length > 20} fullWidth label={key} defaultValue={value}/>

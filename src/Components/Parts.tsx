@@ -10,7 +10,6 @@ type SectionHeaderProps = {
     imgPath: string,
 };
 export const SectionHeader: React.FC<SectionHeaderProps> = (props) =>{
-    //console.log(props.ref);
     return(
         <h2 className="h2 mb-3 text-center"><img id={props.name} src={props.imgPath} alt={props.name}/>
             <div className="font-s">{props.sub}</div>
