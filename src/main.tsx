@@ -67,8 +67,8 @@ const App: React.FC<AppProps> = (props) =>{
 
     useEffect(()=>{
         getDocsFromDb(db, "instructor", (list) =>{
-            setInstructors(list);
-            const pd = list.map((inst: {[key: string]: string})=>{
+            setInstructors(list.map(item=>item.data));
+            const pd = list.map(item=>item.data).map((inst: {[key: string]: string})=>{
                 return [inst.name, inst.plan_description];
             });
             setCourses(pd);
@@ -77,16 +77,17 @@ const App: React.FC<AppProps> = (props) =>{
             setAbout(doc.about);
             document.title = doc.title;
         });
-        getDocsFromDb(db, "plans",  (doc) =>{
+        getDocsFromDb(db, "plans",  (list) =>{
             let p = {};
-            doc.forEach((plan: {[key: string]: string | number}) =>{
+            list.map(item=>item.data).forEach((plan: {[key: string]: string | number}) =>{
                 if(!Array.isArray(p[plan.instructor])) p[plan.instructor] = [];
                 p[plan.instructor].push({
                     price: plan.price,
                     text: plan.text,
                 });
             });
-            setPlansOrgn(doc);
+            //let orgn = doc.concat([doc.id]);
+            setPlansOrgn(list);
             setPlans(p);
         });
     }, []);

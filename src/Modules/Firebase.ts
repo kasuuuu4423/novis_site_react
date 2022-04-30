@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, getDoc, doc, Firestore, updateDoc } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs, getDoc, doc, Firestore, updateDoc, DocumentData } from 'firebase/firestore/lite';
 import { getAuth } from "firebase/auth";
 import { firebaseConfig } from "../config";
 
@@ -18,7 +18,7 @@ export async function getInstructors(db: Firestore, callback: (Array)=>void) {
 export async function getDocsFromDb(db: Firestore, collectionName: string, callback: (Array)=>void) {
     const Col = collection(db, collectionName);
     const Snapshot = await getDocs(Col);
-    const List: Array<any> = Snapshot.docs.map(doc => doc.data());
+    const List: Array<{id: string, data: DocumentData}> = Snapshot.docs.map(doc => {return{id: doc.id, data: doc.data()}});
     callback(List);
 }
 

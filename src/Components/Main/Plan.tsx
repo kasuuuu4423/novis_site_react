@@ -72,9 +72,6 @@ type CourseProps = {
     id?: string,
     name: string,
     comment?: string,
-    singlePrice?: string,
-    monthlyPrice?: string,
-    prices?: Array<Array<string>>,
     plans?: Array<{[key: string]: string | number}>
     isSmall?: boolean,
 };
@@ -86,7 +83,7 @@ const Course: React.FC<CourseProps> = (props) =>{
             <Head3 id={"plan_"+props.id}>{props.name}</Head3>
             {props.comment?<Comment>{props.comment}</Comment>:""}
             <WrapPrice>
-                {props.plans ? props.plans.map((plan, i)=><Price key={i}>{plan.text}¥{typeof plan.price == "number" ? plan.price.toLocaleString():plan.price}</Price>):""}
+                {props.plans ? props.plans.map((plan, i)=><Price key={i}>{plan.text}¥{typeof plan.price == "number" ? plan.price.toLocaleString():parseInt(plan.price).toLocaleString()}</Price>):""}
             </WrapPrice>
         </div>
     );

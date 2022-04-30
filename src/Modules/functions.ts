@@ -26,3 +26,15 @@ export const map = (target_num: number, in_min: number, in_max: number, out_min:
     //結果
 	return rs
 }
+
+export const sortByKeys = (object: Object) =>{
+    const pairs = Object.entries(object);
+    pairs.sort(function(p1, p2){
+        let p1Key = p1[0], p2Key = p2[0];
+        if(p1Key < p2Key){ return -1; }
+        if(p1Key > p2Key){ return 1; }
+        return 0;
+    })
+    const newObject = Object.fromEntries(pairs);
+    return newObject;
+}
