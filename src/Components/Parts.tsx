@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { useEffect, useState } from 'react';
+import styled, {keyframes} from 'styled-components';
+import Colors from '../Cssvars/Colors';
 
 export const scrollDuration = 1200;
 
@@ -41,3 +43,22 @@ export const Scrollbar: React.FC<ScrollbarProps> = (props) =>{
         </div>
     );
 }
+
+const animLoading = keyframes`
+    from{
+        transform: scale(0%);
+    }
+    to{
+        transform: scale(120%);
+    }
+`;
+
+export const Loading = styled.div`
+    transform: scale(0%);
+    width: 30px;
+    height: 30px;
+    background: ${Colors.BLUE};
+    border-radius: 100%;
+    margin: auto;
+    animation: ${animLoading} .7s infinite -.7s cubic-bezier(0.76, 0, 0, 1.01) alternate;
+`;
