@@ -101,7 +101,7 @@ class Plan extends React.Component<PlanProps, PlanState>{
         const courses = this.props.course ? this.props.course.map((description)=>{return [description[0], replaceAllReturns(description[1])]}):[];
         return (
             <Section ref={this.props.inViews[0]} className="Plan">
-                <SectionHeader  name="Plan" sub="コース" imgPath="./img/plan_h.png"/>
+                <SectionHeader name="Plan" sub="コース" imgPath="./img/plan_h.png"/>
                 {courses != [] ? courses.map((course)=>{
                     return <Course key={course[0]} id={course[0]} name={course[0] +" コース"} plans={this.props.plans[course[0]]} //singlePrice='8,000' monthlyPrice='30,000'
                         comment={course[1]}/>

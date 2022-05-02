@@ -1,8 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import styled, {keyframes} from 'styled-components';
 import Colors from '../Cssvars/Colors';
+import { HeadingRefContext } from '../main';
 
 export const scrollDuration = 1200;
 
@@ -12,8 +13,10 @@ type SectionHeaderProps = {
     imgPath: string,
 };
 export const SectionHeader: React.FC<SectionHeaderProps> = (props) =>{
+    const refContext = useContext(HeadingRefContext);
+
     return(
-        <h2 className="h2 mb-3 text-center"><img id={props.name} src={props.imgPath} alt={props.name}/>
+        <h2 ref={refContext[props.name]} className="h2 mb-3 text-center"><img id={props.name} src={props.imgPath} alt={props.name}/>
             <div className="font-s">{props.sub}</div>
         </h2>
     );

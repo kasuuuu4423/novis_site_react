@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, createContext, useCallback } from 'react';
 import * as ReactDOM from 'react-dom';
 import styled, {css} from "styled-components";
 import Colors from './Cssvars/Colors';
@@ -27,6 +27,7 @@ const Container = styled.div`
     font-weight: 200;
     line-height: 1.5rem;
     font-size: 14px;
+    overflow-x: hidden;
     section.top, section.about{
         height: 100vh;
     }
@@ -58,12 +59,57 @@ const BG = styled.img`
     mix-blend-mode: lighten;
 `;
 
+export const HeadingRefContext = createContext(null);
+export const HeadingPositionContext = createContext(null);
+
 const App: React.FC<AppProps> = (props) =>{
     const [instructors, setInstructors] = useState([]);
     const [about, setAbout] = useState("");
     const [courses, setCourses] = useState([]);
     const [plans, setPlans] = useState({});
     const [plansOrgn, setPlansOrgn] = useState([]);
+    const [headingPosition, setHeadingPosition] = useState(0);
+    const [inViewNow, setInViewNow] = useState(0);
+
+    const headingRefs: {[key: string]: React.MutableRefObject<HTMLHeadingElement>} = {
+        Top: useRef(null),
+        About: useRef(null),
+        Instructor: useRef(null),
+        Plan: useRef(null),
+        Flow: useRef(null),
+        Place: useRef(null),
+        Contact: useRef(null),
+    };
+    const [headingRefContext, setHeadingRefContext] = useState(headingRefs);
+
+    const numSections = 7;
+    let inViews = [];
+    for(let i = 0; i < numSections; i++){
+        inViews[i] = useInView({
+            root: null,
+            rootMargin: '0px',
+            threshold: .43,
+        });
+    }
+
+    useEffect(()=>{
+        const onScroll = ()=>{
+            const refs = Object.values(headingRefContext);
+            const headingPositions = refs.map(ref=>ref.current.getBoundingClientRect().top);
+            for(let i = 0; i < inViews.length; i++){
+                if(inViews[i][1] && i != 0){
+                    setInViewNow(i);
+                    break;
+                }
+            }
+            setHeadingPosition(headingPositions[inViewNow]);
+        }
+
+        window.addEventListener("scroll", onScroll);
+        return ()=>{
+            window.removeEventListener("scroll", onScroll);
+        }
+    }, [inViews]);
 
     useEffect(()=>{
         getDocsFromDb(db, "instructor", (list) =>{
@@ -92,19 +138,10 @@ const App: React.FC<AppProps> = (props) =>{
         });
     }, []);
 
-
-    const numSections = 7;
-    let inViews = [];
-    for(let i = 0; i < numSections; i++){
-        inViews[i] = useInView({
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.3,
-        });
-    }
     const sections = [
         <section ref={inViews[0][0]} className="top relative">
-            <BG className='absolute-center' src="./img/bg.png" alt="" />
+            <h2 ref={headingRefs["Top"]} style={{opacity: 0, position: "absolute"}}></h2>
+            <BG className='absolute-center' src="./img/bg.png" alt="背景" />
             <img className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
             <div className="absolute-center-x top-80 font-m font-weight-100">Beatbox Lesson Studio</div>
         </section>,
@@ -122,14 +159,18 @@ const App: React.FC<AppProps> = (props) =>{
                 <Container>
                     <Header inViews={inViews} />
                     <main>
-                        {sections}
+                        <HeadingRefContext.Provider value={headingRefContext}>
+                            {sections}
+                        </HeadingRefContext.Provider>
                     </main>
+                    <HeadingPositionContext.Provider value={headingPosition}>
+                        <Background/>
+                    </HeadingPositionContext.Provider>
                 </Container>
             </Route>
             <Route path="/dashboard">
                 <Dashboard about={about} plans={plansOrgn} instructors={instructors} course={courses}/>
             </Route>
-            <Background/>
         </BrowserRouter>
     );
 }

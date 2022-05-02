@@ -17,7 +17,9 @@ type InstructorPersonProps = {
     websiteUrl: string,
 };
 
-const Section = styled.section``;
+const Text = styled.p`
+    white-space: pre-wrap;
+`;
 
 const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
     const [descHeight, setDescHeight] = useState(0);
@@ -84,7 +86,7 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
             </div>
             <div className="info">
                 <div ref={boxRef} className="font-serif text-scroll h-p300 h-md-p500 mb-3">
-                    <p ref={textRef} className="text"><span className="bg-gray">{props.description}</span></p>
+                    <Text ref={textRef} className="text"><span className="bg-gray">{props.description}</span></Text>
                 </div>
                 <Scrollbar id={props.id} top={scrollbarTop} left={scrollbarLeft} scrollThumbTop={scrollPosition} boxHeight={descHeight} textHeight={textHeight}/>
                 <div className="sns">
