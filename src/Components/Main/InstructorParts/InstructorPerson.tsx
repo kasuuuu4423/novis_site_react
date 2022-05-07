@@ -30,6 +30,7 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
 
     const boxRef = useRef<HTMLDivElement>(null);
     const textRef = useRef<HTMLDivElement>(null);
+    const imgRef = useRef<HTMLImageElement>(null);
 
     const isScroll = useCallback(()=>{
         if(boxRef.current && textRef.current){
@@ -51,16 +52,17 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
     }, []);
 
     const isLoad = useCallback(()=>{
-        setScrollbarTop(window.scrollY + boxRef.current.getBoundingClientRect().top)
-        setScrollbarLeft(boxRef.current.getBoundingClientRect().right)
+        setScrollbarTop(window.scrollY + boxRef.current.getBoundingClientRect().top);
+        setScrollbarLeft(boxRef.current.getBoundingClientRect().right);
+        console.log(boxRef.current.getBoundingClientRect().top);
     }, []);
 
     useEffect(()=>{
         if(boxRef.current && textRef.current){
             setDescHeight(boxRef?.current.clientHeight);
             setTextHeight(textRef?.current.clientHeight);
-            boxRef.current.addEventListener("scroll", isScroll, {passive: true});
             isLoad();
+            boxRef.current.addEventListener("scroll", isScroll, {passive: true});
             //window.addEventListener("load", isLoad);
             window.addEventListener("resize", isResize);
             return ()=>{
@@ -70,6 +72,13 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
             }
         }
     }, [boxRef, textRef]);
+
+    useEffect(()=>{
+        if(imgRef.current) imgRef.current.addEventListener("load", isLoad);
+        return()=>{
+            if(imgRef.current) imgRef.current.removeEventListener("load", isLoad);
+        }
+    }, [imgRef]);
 
     return (
         <div className="instrctr grid-2column mb-5" id={"instructor_"+props.id}>
@@ -82,7 +91,7 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
                     <div className="dot"></div>
                 </div>
                 </div>
-                <img loading='lazy' className="img-cover" src={props.imgPath} alt={props.name}/>
+                <img ref={imgRef} className="img-cover" src={props.imgPath} alt={props.name}/>
             </div>
             <div className="info">
                 <div ref={boxRef} className="font-serif text-scroll h-p300 h-md-p500 mb-3">
