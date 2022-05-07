@@ -2,8 +2,6 @@ import * as React from 'react';
 import Colors from '../../Cssvars/Colors';
 import styled, {css} from "styled-components";
 import Mixin from "../../Cssvars/Mixin";
-import FontSize from '../../Cssvars/FontSize';
-import { Link, animateScroll as Scroll } from "react-scroll";
 
 type ScrollPositionProps = {
     inViews: Array<any>,
@@ -13,7 +11,8 @@ const Wrap = styled.div`
     position: fixed;
     top: 30px;
     left: 0;
-    width: 30px;
+    width: 20px;
+    ${Mixin.media("md", "width: 30px")}
     .line{
         width: 100%;
         height: 2px;

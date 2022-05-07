@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Colors from '../../Cssvars/Colors';
 import styled, {css} from "styled-components";
+import Mixin from '../../Cssvars/Mixin';
 
 type HamElmProps = {
     isOpen: boolean,
@@ -9,12 +10,15 @@ type HamElmProps = {
 const HamElm = styled.div<HamElmProps>`
     &.hamburger{
         position: fixed;
-        width: 40px;
-        height: 30px;
+        width: 30px;
+        height: 20px;
         z-index: 100;
-        right: 30px;
+        right: 15px;
         top: 30px;
         cursor: pointer;
+        ${Mixin.media("md", "width: 40px")}
+        ${Mixin.media("md", "height: 30px;")}
+        ${Mixin.media("md", "right: 30px;")}
         .lines{
             height: 100%;
             position: relative;
