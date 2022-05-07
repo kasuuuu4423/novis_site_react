@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useState, useEffect, useRef, createContext, useCallback } from 'react';
+import { useState, useEffect, useRef, createContext } from 'react';
 import * as ReactDOM from 'react-dom';
-import styled, {css} from "styled-components";
+import styled from "styled-components";
 import Colors from './Cssvars/Colors';
 import Mixin from './Cssvars/Mixin';
 import Header from './Header';
@@ -14,10 +14,10 @@ import Contact from './Components/Main/Contact';
 import Background from './Components/Main/Background';
 import Dashboard from './Dashboard';
 import { useInView } from 'react-intersection-observer';
-import { getDocsFromDb, getDocFromDb, getInstructors } from './Modules/Firebase';
+import { getDocsFromDb, getDocFromDb } from './Modules/Firebase';
 import { BrowserRouter,  Route } from 'react-router-dom';
 import { db } from './Modules/Firebase';
-
+import { White } from './Components/Parts';
 
 
 const Container = styled.div`
@@ -28,7 +28,7 @@ const Container = styled.div`
     line-height: 1.5rem;
     font-size: 14px;
     overflow-x: hidden;
-    section.top, section.about{
+    section.top{
         height: 100vh;
     }
     section:not(.top){
@@ -49,6 +49,10 @@ const Container = styled.div`
     }
     section:not(.top, .header){
         padding-bottom: 7rem;
+        &.about{
+            padding-top: 5rem;
+            padding-bottom: 10rem;
+        }
     }
 `;
 
@@ -70,6 +74,7 @@ const App: React.FC<AppProps> = (props) =>{
     const [plansOrgn, setPlansOrgn] = useState([]);
     const [headingPosition, setHeadingPosition] = useState(0);
     const [inViewNow, setInViewNow] = useState(0);
+    const [isLoad, setIsLoad] = useState(false);
 
     const headingRefs: {[key: string]: React.MutableRefObject<HTMLHeadingElement>} = {
         Top: useRef(null),
@@ -135,6 +140,7 @@ const App: React.FC<AppProps> = (props) =>{
             //let orgn = doc.concat([doc.id]);
             setPlansOrgn(list);
             setPlans(p);
+            setIsLoad(true);
         });
     }, []);
 
@@ -142,7 +148,7 @@ const App: React.FC<AppProps> = (props) =>{
         <section ref={inViews[0][0]} className="top relative">
             <h2 ref={headingRefs["Top"]} style={{opacity: 0, position: "absolute"}}></h2>
             <BG className='absolute-center' src="./img/bg.png" alt="背景" />
-            <img className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
+            <img style={{transform: "translate(-51%, -50%)"}} className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
             <div className="absolute-center-x top-80 font-m font-weight-100">Beatbox Lesson Studio</div>
         </section>,
         <About text={about} inViews={inViews[1]}/>,
@@ -152,10 +158,10 @@ const App: React.FC<AppProps> = (props) =>{
         <Place inViews={inViews[5]}/>,
         <Contact inViews={inViews[6]}/>,
     ];
-
     return (
         <BrowserRouter>
             <Route exact path="/">
+                <White isTransparent={isLoad}></White>
                 <Container>
                     <Header inViews={inViews} />
                     <main>

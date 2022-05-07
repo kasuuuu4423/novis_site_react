@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import { useEffect, useState } from 'react';
 import { useContext } from 'react';
 import styled, {keyframes} from 'styled-components';
 import Colors from '../Cssvars/Colors';
@@ -64,4 +64,41 @@ export const Loading = styled.div`
     border-radius: 100%;
     margin: auto;
     animation: ${animLoading} .7s infinite -.7s cubic-bezier(0.76, 0, 0, 1.01) alternate;
+`;
+
+type WhiteProps = {
+    isTransparent: boolean,
+};
+type _WhiteProps = {
+    isTransparent: boolean,
+    isHidden: boolean,
+};
+export const White: React.FC<WhiteProps> = (props) =>{
+    const [isHidden, setIsHidden] = useState(false);
+    useEffect(()=>{
+        if(props.isTransparent){
+            setTimeout(()=>{
+                setIsHidden(true);
+            }, 500);
+        }
+    }, [props.isTransparent]);
+
+    return(
+        <_White isHidden={isHidden} isTransparent={props.isTransparent}/>
+    );
+}
+export const _White = styled.div<_WhiteProps>`
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: ${Colors.WHITE};
+    transition: .5s;
+    ${props=>props.isTransparent?`
+        opacity: 0;
+    `:""}
+    ${props=>props.isHidden?`
+        display: none;
+    `:""}
 `;
