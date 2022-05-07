@@ -1,76 +1,90 @@
 import * as React from 'react';
 import { useEffect, useRef, useState, Suspense, useCallback, useContext } from 'react';
 import styled from '@emotion/styled';
-import { useTexture } from '@react-three/drei';
-import { Canvas, useLoader, useFrame } from '@react-three/fiber';
-import {  Mesh, TextureLoader } from 'three';
-import { Vector3 } from 'three';
 import { map } from "../../Modules/functions";
 import { HeadingPositionContext } from '../../main';
+import Colors from '../../Cssvars/Colors';
+import Konva from 'konva';
+import { Layer, Stage, Rect, Image } from 'react-konva';
 
-// const Circle = () => {
-//     const tex = useLoader(TextureLoader, 'img/particle.png');
-//     return (
-//         <mesh>
-//             <circleGeometry />
-//             <meshStandardMaterial map={tex} transparent/>
-//         </mesh>
-//     );
-// };
 
 type ParticleProps = {
-    position: [number, number, number],
-    offsetDefault: [number, number, number],
+    position: [number, number],
     opacity: number,
     id: number,
     headingPosition: number,
 };
+type ParticleState = {
+    offsetY: number,
+    sin: number,
+};
 
-let now = 0;
-let sin = 0;
-let posFromHeading = 0;
 const Particle: React.FC<ParticleProps> = (props) =>{
-    const tex = useLoader(TextureLoader, 'img/particle.png');
-    const [offset, setOffset] = useState([0,0,0]);
-    //let [now, setNow] = useState(0);
-    const ref = useRef(null);
-    const posFromHeading = map(props.headingPosition, 0, document.documentElement.clientHeight, 5, -5);
-    
-    useEffect(()=>{
-        sin = props.offsetDefault[1] > 0.3 ? -1 : 1 * props.offsetDefault[1];
-    }, []);
+    const particleImage: HTMLImageElement = document.createElement('img');
+    particleImage.src = 'img/particle.png';
+    const offsetDefault = Math.random()*100 * (Math.random()*100 > 5 ? 1 : -1);
+    const imageRef = useRef(null);
 
-    useFrame((state, delta) =>{
+    const [offsetY, setOffsetY] = useState(offsetDefault);
+    const [posY, setPosY] = useState(0);
+    const [sin, setSin] = useState(0);
+    const [now, setNow] = useState(0);
+    const [sizeCoeff, setSizeCoeff] = useState(Math.random() + 1);
+    const [centering, setCentering] = useState(0);
+    const [diff, setDiff] = useState(0);
+    const [colorFilter, setColorFilter] = useState(0);
+    //console.log(offsetY);
+
+    const updateFrame = () =>{
         if(sin < 3.14*2){
-            //setOffset([0, Math.sin(sin), 0])
-            sin += props.offsetDefault[1]/150;
+            setSin(sin + offsetDefault/1000);
+            setOffsetY(Math.sin(sin)*10)
         }
         else{
-            sin = 0;
-            //setOffset([0, Math.sin(sin), 0]);
+            setSin(0);
+            setOffsetY(Math.sin(sin)*10);
         }
-        const diff = Math.abs(now - posFromHeading);
-        if(now < posFromHeading){
-            now += 0.005 * diff;
+        
+        setDiff(Math.abs(now - props.headingPosition));
+        if(now < props.headingPosition){
+            setNow(now + 0.02 * diff);
         }
-        else if(now > posFromHeading){
-            now -= 0.005  * diff;
+        else if(now > props.headingPosition){
+            setNow(now - 0.02 * diff);
         }
-        ref.current.position.y = props.id == 1 ? 
-            now + (Math.sin(sin)/3*props.offsetDefault[1]) - 0.5 :
-            props.position[1] + (Math.sin(sin)/3*props.offsetDefault[1]);
-    });
+        setColorFilter(255 * (diff<100?diff:100) * 0.01);
+        setPosY(
+            props.id == 1 ? 
+                now + offsetY :
+                props.position[1] + offsetY
+        );
+    }
 
-    const pos = new Vector3(
-        props.position[0]+(offset[0]/10),
-        props.id==1 ? posFromHeading+(offset[1]/3*props.offsetDefault[1]) : props.position[1]+(offset[1]/3*props.offsetDefault[1]),
-        props.position[2]+(offset[2]/10)
-    );
+
+    const updateFrameRef = useRef<() => void>(updateFrame);
+    useEffect(() => {
+        updateFrameRef.current = updateFrame; // 新しいcallbackをrefに格納！
+    }, [updateFrame]);
+
+    useEffect(()=>{
+        if(imageRef.current){
+            setCentering(imageRef.current.width()/2);
+        }
+        const update = () =>{updateFrameRef.current()}
+        const id = setInterval(update, 33);
+        return()=>{
+            clearInterval(id);
+        }
+    }, []);
+    
+    useEffect(() => {
+        if (particleImage) {
+            imageRef.current.cache();
+        }
+    }, [particleImage]);
 
     return (
-        <sprite ref={ref} position={pos} scale={new Vector3(3, 3, 1)}>
-            <spriteMaterial opacity={props.opacity} attach='material' transparent map={tex} />
-        </sprite>
+        <Image ref={imageRef} filters={[Konva.Filters.RGB]} green={255} blue={props.id==1?colorFilter:255} red={150} opacity={props.opacity} x={props.position[0]-centering} y={posY-centering} width={150*sizeCoeff*(props.id==1?map(colorFilter, 0, 255, 1.5, 1):1)} height={150*sizeCoeff*(props.id==1?map(colorFilter, 0, 255, 1.5, 1):1)} image={particleImage}/>
     );
 }
 
@@ -78,51 +92,60 @@ const Wrap = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
     z-index: -1;
-    overflow: hidden;
 `;
 
-type BackgroundProps = {
-    headerPositions?: Array<number>,
-};
-const Background: React.FC<BackgroundProps> = (props) =>{
+const Background: React.FC = () =>{
+    const [windowSize, setWindowSize] = useState({w: 0, h: 0});
+    const particleImage: HTMLImageElement = document.createElement('img');
+    particleImage.src = 'img/particle.png';
     const headingPosition = useContext(HeadingPositionContext);
-    const windowWidth = document.documentElement.clientWidth;
-    let positions: Array<[number, number, number]> = [
-        [2*map(windowWidth, 1, 2000, 0, 2), 1.5, 1.5],
-        [-1*map(windowWidth, 1, 2000, 0, 2), -1.5, -0.9],
-        [-2*map(windowWidth, 1, 2000, 0, 2), -1.1, 1.2],
+    
+    let positions: Array<[number, number]> = [
+        [windowSize.w*0.15, windowSize.h*0.5],
+        [windowSize.w*0.4, windowSize.h*0.5],
+        [windowSize.w*0.85, windowSize.h*0.8],
     ];
-    const  [offsets, setOffset] = useState([]);
+
     const [opacity, setOpacity] = useState(0);
     const isScroll = useCallback(()=>{
         const scroll = window.pageYOffset;
         setOpacity(scroll/1000 > 1 ? 1 : scroll/1000);
     }, []);
+
     useEffect(()=>{
         const o = [];
         for(let i = 0; i < positions.length; i++){
             o.push([0, Math.random(), 0]);
         }
-        setOffset(o);
         window.addEventListener('scroll', isScroll);
         return(()=>{
             window.removeEventListener('scroll', isScroll);
         });
     }, []);
 
+    useEffect(()=>{
+        setWindowSize({
+            w: document.documentElement.clientWidth,
+            h: document.documentElement.clientHeight,
+        });
+
+        window.addEventListener('resize', ()=>{
+            setWindowSize({
+                w: document.documentElement.clientWidth,
+                h: document.documentElement.clientHeight,
+            });
+        });
+    }, []);
+
     return(
         <Wrap>
-            <Canvas>
-                <color attach="background" args={[0,0,0]} />
-                <ambientLight intensity={0.5} />
-                {/* <directionalLight color="white" position={[0, 0, 5]} /> */}
-                <Suspense fallback={null}>
-                    {positions.map(((pos, i)=><Particle headingPosition={headingPosition} opacity={opacity} key={i} id={i} offsetDefault={offsets[i]} position={pos}/>))}
-                </Suspense>
-            </Canvas>
+            <Stage width={window.innerWidth} height={window.innerHeight}>
+                <Layer>
+                    <Rect fill={Colors.BLACK} x={0} y={0} width={windowSize.w} height={windowSize.h}/>
+                    {positions.map(((pos, i)=><Particle headingPosition={headingPosition} opacity={opacity} key={i} id={i} position={pos}/>))}
+                </Layer>
+            </Stage>    
         </Wrap>
     );
 }

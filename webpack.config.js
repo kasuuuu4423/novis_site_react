@@ -1,3 +1,13 @@
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+module.exports = {
+    Plugins: [
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+        })
+    ],
+}
+
 module.exports = {
     // モード値を production に設定すると最適化された状態で、
     // development に設定するとソースマップ有効でJSファイルが出力される
