@@ -118,7 +118,7 @@ const Background: React.FC = () =>{
         for(let i = 0; i < positions.length; i++){
             o.push([0, Math.random(), 0]);
         }
-        window.addEventListener('scroll', isScroll);
+        window.addEventListener('scroll', isScroll, {passive: true});
         return(()=>{
             window.removeEventListener('scroll', isScroll);
         });
