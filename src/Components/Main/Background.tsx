@@ -33,7 +33,6 @@ const Particle: React.FC<ParticleProps> = (props) =>{
     const [centering, setCentering] = useState(0);
     const [diff, setDiff] = useState(0);
     const [colorFilter, setColorFilter] = useState(0);
-    //console.log(offsetY);
 
     const updateFrame = () =>{
         if(sin < 3.14*2){

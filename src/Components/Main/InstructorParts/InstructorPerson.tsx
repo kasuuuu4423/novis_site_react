@@ -54,7 +54,6 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
     const isLoad = useCallback(()=>{
         setScrollbarTop(window.scrollY + boxRef.current.getBoundingClientRect().top);
         setScrollbarLeft(boxRef.current.getBoundingClientRect().right);
-        console.log(boxRef.current.getBoundingClientRect().top);
     }, []);
 
     useEffect(()=>{
