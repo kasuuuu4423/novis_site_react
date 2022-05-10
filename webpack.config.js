@@ -13,6 +13,13 @@ module.exports = {
     // development に設定するとソースマップ有効でJSファイルが出力される
     mode: "development",
 
+    cache: {
+        type: 'filesystem',
+        buildDependencies: {
+            config: [__filename]
+        }
+    },
+
     // メインとなるJavaScriptファイル（エントリーポイント）
     entry: "./src/main.tsx",
     // ファイルの出力設定
@@ -22,6 +29,7 @@ module.exports = {
         // 出力ファイル名
         filename: "bundle.js"
     },
+    
     module: {
         rules: [
             {

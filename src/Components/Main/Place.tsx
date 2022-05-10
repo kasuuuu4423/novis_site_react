@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import styled, {css} from "styled-components";
 import { SectionHeader } from "../Parts";
 
@@ -27,7 +26,7 @@ class Place extends React.Component<PlaceProps, PlaceState>{
                         <div className="info font-serif">
                             <div className="text-center mb-3">
                                 <a target="_blank" rel="noopener noreferrer" href="https://st-siirakannsu.com/">
-                                    <img className="w-100" src="./img/place_2.png" alt="シーラカンス"/>
+                                    <img loading='lazy' className="w-100" src="./img/place_2.png" alt="シーラカンス"/>
                                 </a>
                             </div>
                             <div><span className="bg-gray">スタジオシーラカンス</span></div>
