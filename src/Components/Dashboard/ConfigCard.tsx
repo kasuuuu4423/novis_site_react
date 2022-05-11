@@ -11,6 +11,7 @@ type ConfigCardProps = {
         document: Array<string>
     },
     ids?: Array<string>,
+    annotation?: string, 
 };
 
 const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
@@ -43,6 +44,7 @@ const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
     return(
         <Card sx={{marginBottom: "50px"}}>
             <Box sx={{padding: 4, fontWeight: "bold"}}><h2>{props.title}</h2></Box>
+            {props.annotation?<Box sx={{padding: 4, paddingTop: 0, paddingBottom: 4, fontWeight: "bold"}}><p>{props.annotation}</p></Box>:""}
             {props.defaults ? props.defaults.map((d)=>{
                 const fields: Array<JSX.Element> = [];
                 for(const [key, value] of Object.entries(d)){

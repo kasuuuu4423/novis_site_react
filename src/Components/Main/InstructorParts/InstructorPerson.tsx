@@ -13,7 +13,7 @@ type InstructorPersonProps = {
     description: string,
     twitterId: string,
     instagramId: string,
-    youtubeId: string,
+    youtube: string,
     websiteUrl: string,
 };
 
@@ -110,9 +110,9 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
                                 <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-brands fa-instagram"></i><span>Instagram</span></div>
                             </a>
                         </div>:""}
-                        {props.youtubeId?<div className="youtube">
+                        {props.youtube?<div className="youtube">
                             <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={"https://youtube.com/user/"+props.youtubeId}>
+                            <a target="_blank" rel="noopener noreferrer" href={props.youtube}>
                                 <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-brands fa-youtube"></i><span>YouTube</span></div>
                             </a>
                         </div>:""}

@@ -26,7 +26,7 @@ class Instructor extends React.Component<InstructorProps, InstructorState>{
             <Section ref={this.props.inViews[0]} className="instructor">
                 <SectionHeader name="Instructor" sub="講師" imgPath="./img/instructor_h.png"/>
                 {this.props.instructors.map((instructor, i) =>
-                    <InstructorPerson key={i} id={i} name={instructor.name} imgPath={instructor.imgPath} twitterId={instructor.twitter} instagramId={instructor.instagram} websiteUrl={instructor.website} youtubeId={instructor.youtube} description={instructor.description}/>)}
+                    <InstructorPerson key={i} id={i} name={instructor.name} imgPath={instructor.imgPath} twitterId={instructor.twitter} instagramId={instructor.instagram} websiteUrl={instructor.website} youtube={instructor.youtube} description={instructor.description}/>)}
             </Section>
         );
     }
