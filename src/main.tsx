@@ -10,6 +10,7 @@ import Instructor from './Components/Main/Instructor';
 import Place from './Components/Main/Place';
 import Plan from './Components/Main/Plan';
 import Flow from './Components/Main/Flow';
+import QandA from './Components/Main/QandA';
 import Contact from './Components/Main/Contact';
 import Background from './Components/Main/Background';
 import Dashboard from './Dashboard';
@@ -31,7 +32,7 @@ const Container = styled.div`
     section.top{
         height: 100vh;
     }
-    section:not(.top){
+    section:not(.top, .video){
         margin-right: 50px;
         margin-left: 50px;
         ${Mixin.media("sm", "margin-right: 75px;")}
@@ -60,7 +61,7 @@ type AppProps = {
 };
 
 const BG = styled.img`
-    mix-blend-mode: lighten;
+    //mix-blend-mode: lighten;
 `;
 
 export const HeadingRefContext = createContext(null);
@@ -72,12 +73,14 @@ const App: React.FC<AppProps> = (props) =>{
     const [courses, setCourses] = useState([]);
     const [plans, setPlans] = useState({});
     const [plansOrgn, setPlansOrgn] = useState([]);
+    const [qAndA, setQAndA] = useState([]);
     const [headingPosition, setHeadingPosition] = useState(0);
     const [inViewNow, setInViewNow] = useState(0);
     const [isLoad, setIsLoad] = useState(false);
 
     const headingRefs: {[key: string]: React.MutableRefObject<HTMLHeadingElement>} = {
         Top: useRef(null),
+        Video: useRef(null),
         About: useRef(null),
         Instructor: useRef(null),
         Plan: useRef(null),
@@ -87,7 +90,7 @@ const App: React.FC<AppProps> = (props) =>{
     };
     const [headingRefContext, setHeadingRefContext] = useState(headingRefs);
 
-    const numSections = 7;
+    const numSections = 9;
     let inViews = [];
     for(let i = 0; i < numSections; i++){
         inViews[i] = useInView({
@@ -140,6 +143,9 @@ const App: React.FC<AppProps> = (props) =>{
             //let orgn = doc.concat([doc.id]);
             setPlansOrgn(list);
             setPlans(p);
+        });
+        getDocsFromDb(db, "qanda",  (list) =>{
+            setQAndA(list);
             setIsLoad(true);
         });
     }, []);
@@ -151,12 +157,19 @@ const App: React.FC<AppProps> = (props) =>{
             <img style={{transform: "translate(-51%, -50%)"}} className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
             <div className="absolute-center-x top-80 font-m font-weight-100">Beatbox Lesson Studio</div>
         </section>,
-        <About text={about} inViews={inViews[1]}/>,
-        <Instructor instructors={instructors} inViews={inViews[2]}/>,
-        <Plan course={courses} plans={plans} inViews={inViews[3]}/>,
-        <Flow inViews={inViews[4]}/>,
-        <Place inViews={inViews[5]}/>,
-        <Contact inViews={inViews[6]}/>,
+        <section ref={inViews[1][0]} className="video">
+            <h2 ref={headingRefs["Video"]} style={{opacity: 0, position: "absolute"}}></h2>
+            <div className="iframe-169">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/tK94QT5a-dg" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            </div>
+        </section>,
+        <About text={about} inViews={inViews[2]}/>,
+        <Instructor instructors={instructors} inViews={inViews[3]}/>,
+        <Plan course={courses} plans={plans} inViews={inViews[4]}/>,
+        <Flow inViews={inViews[5]}/>,
+        <Place inViews={inViews[6]}/>,
+        <QandA qanda={qAndA} inViews={inViews[7]}/>,
+        <Contact inViews={inViews[8]}/>,
     ];
     return (
         <BrowserRouter>
@@ -175,7 +188,7 @@ const App: React.FC<AppProps> = (props) =>{
                 </Container>
             </Route>
             <Route path="/dashboard">
-                <Dashboard about={about} plans={plansOrgn} instructors={instructors} course={courses}/>
+                <Dashboard about={about} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA}/>
             </Route>
         </BrowserRouter>
     );

@@ -17,6 +17,7 @@ type DashboardProps = {
     about: string,
     course: Array<any>,
     plans: Array<any>,
+    qanda: Array<any>,
 };
 
 const Dashboard: React.FC<DashboardProps> = (props) =>{
@@ -32,6 +33,7 @@ const Dashboard: React.FC<DashboardProps> = (props) =>{
         about: props.about,
         course: props.course,
         plans: props.plans,
+        qanda: props.qanda,
     };
 
     return (

@@ -1563,6 +1563,20 @@ IFRAME
   height: 100%;
 }
 
+.iframe-169 {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+}
+
+.iframe-169 iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 @media screen and (min-width: 768px) {
   .iframe-md-100 {
     padding-top: auto;
