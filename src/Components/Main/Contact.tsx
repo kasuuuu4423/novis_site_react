@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import styled, {css} from "styled-components";
 import Colors from '../../Cssvars/Colors';
 import FontSize from '../../Cssvars/FontSize';
-import { SectionHeader } from "../Parts";
+import { SectionHeading } from "../Parts";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { sendForm } from "../../Modules/Firebase";
 import { Loading } from "../Parts";
@@ -113,7 +113,7 @@ const Contact: React.FC<ContactProps> = (props) =>{
 
     return (
         <Section formHidden={formHidden} ref={props.inViews[0]} className="Contact">
-            <SectionHeader name="Contact" sub="" imgPath="./img/contact_h.png"/>
+            <SectionHeading name="Contact" sub="" imgPath="./img/contact_h.png"/>
             {!formHidden?<form ref={formRef}>
                 <label className="toggle" htmlFor="apply"><input name='cat' type="radio" id="apply" value="apply" checked={isApply} onChange={()=>{changeIsApply(true)}}/>お申し込み</label>
                 <label className="toggle" htmlFor="contact"><input name='cat' type="radio" id="contact" value="contact" checked={!isApply} onChange={()=>{changeIsApply(false)}}/>お問い合わせ</label>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled, {css} from "styled-components";
-import { SectionHeader } from "../Parts";
+import { SectionHeading } from "../Parts";
 
 type PlaceProps = {
     inViews: Array<any>,
@@ -20,7 +20,7 @@ class Place extends React.Component<PlaceProps, PlaceState>{
     render(){
         return (
             <Section ref={this.props.inViews[0]} className="Place">
-                <SectionHeader name="Place" sub="場所" imgPath="./img/place_h.png"/>
+                <SectionHeading name="Place" sub="場所" imgPath="./img/place_h.png"/>
                 <div className="slide mb-4"><img className="img-fluid" src="./img/place_1.png" alt="スタジオ シーラカンス 内観"/></div>
                     <div className="grid-2column-11">
                         <div className="info font-serif">

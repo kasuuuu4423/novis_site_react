@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import styled, {css} from "styled-components";
 import Colors from '../../Cssvars/Colors';
-import { SectionHeader } from "../Parts";
+import { SectionHeading } from "../Parts";
 import { Link, animateScroll as Scroll } from "react-scroll";
 
 const FlowSection = styled.div`
@@ -44,7 +44,7 @@ class Flow extends React.Component<FlowProps, FlowState>{
     render(){
         return (
             <Section ref={this.props.inViews[0]} className="Flow">
-                <SectionHeader name="Flow" sub="流れ" imgPath="./img/flow_h.png"/>
+                <SectionHeading name="Flow" sub="流れ" imgPath="./img/flow_h.png"/>
                 <div className="wrap_flowSection">
                     {this.flows.map((flow,i)=><FlowSection key={i}>{flow}</FlowSection>)}
                 </div>

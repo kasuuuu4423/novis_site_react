@@ -109,7 +109,7 @@ const Background: React.FC = () =>{
     const [opacity, setOpacity] = useState(0);
     const isScroll = useCallback(()=>{
         const scroll = window.pageYOffset;
-        setOpacity(scroll/1000 > 1 ? 1 : scroll/1000);
+        setOpacity(scroll/3000 > 1 ? 1 : scroll/3000);
     }, []);
 
     useEffect(()=>{
@@ -139,7 +139,7 @@ const Background: React.FC = () =>{
 
     return(
         <Wrap>
-            <Stage width={window.innerWidth} height={window.innerHeight}>
+            <Stage width={windowSize.w} height={windowSize.h}>
                 <Layer>
                     <Rect fill={Colors.BLACK} x={0} y={0} width={windowSize.w} height={windowSize.h}/>
                     {positions.map(((pos, i)=><Particle headingPosition={headingPosition} opacity={opacity} key={i} id={i} position={pos}/>))}
