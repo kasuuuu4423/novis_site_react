@@ -6,6 +6,7 @@ import { HeadingPositionContext } from '../../main';
 import Colors from '../../Cssvars/Colors';
 import Konva from 'konva';
 import { Layer, Stage, Rect, Image } from 'react-konva';
+import { isMobile } from 'react-device-detect';
 
 
 type ParticleProps = {
@@ -106,17 +107,20 @@ const Background: React.FC = () =>{
         });
     }, []);
 
+    const getWindowSize = () =>{
+        return {
+            // w: window.innerWidth,
+            // h: window.innerHeight,
+            w: isMobile ? window.screen.width : document.documentElement.clientWidth,
+            h: isMobile ? window.screen.height : document.documentElement.clientHeight,
+        };
+    }
+
     useEffect(()=>{
-        setWindowSize({
-            w: document.documentElement.clientWidth,
-            h: document.documentElement.clientHeight,
-        });
+        setWindowSize(getWindowSize());
 
         window.addEventListener('resize', ()=>{
-            setWindowSize({
-                w: document.documentElement.clientWidth,
-                h: document.documentElement.clientHeight,
-            });
+            setWindowSize(getWindowSize());
         });
     }, []);
 
