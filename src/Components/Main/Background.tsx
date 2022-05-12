@@ -13,77 +13,59 @@ type ParticleProps = {
     opacity: number,
     id: number,
     headingPosition: number,
-};
-type ParticleState = {
-    offsetY: number,
-    sin: number,
+    layerRef: React.MutableRefObject<any>,
 };
 
 const Particle: React.FC<ParticleProps> = (props) =>{
     const particleImage: HTMLImageElement = document.createElement('img');
     particleImage.src = 'img/particle.png';
-    const offsetDefault = Math.random()*100 * (Math.random()*100 > 5 ? 1 : -1);
+    const offsetDefault = Math.random() * (Math.random() > .5 ? 1 : -1);
     const imageRef = useRef(null);
 
-    const [offsetY, setOffsetY] = useState(offsetDefault);
-    const [posY, setPosY] = useState(0);
-    const [sin, setSin] = useState(0);
-    const [now, setNow] = useState(0);
     const [sizeCoeff, setSizeCoeff] = useState(Math.random() + 1);
     const [centering, setCentering] = useState(0);
-    const [diff, setDiff] = useState(0);
     const [colorFilter, setColorFilter] = useState(0);
 
-    const updateFrame = () =>{
-        if(sin < 3.14*2){
-            setSin(sin + offsetDefault/1000);
-            setOffsetY(Math.sin(sin)*10)
+    const onUpdateFrame = (frame) =>{
+        const now: number = imageRef.current.y();
+        const move:number = Math.sin(frame.time/1000 + offsetDefault)/5;
+        let posY = now;
+        if(props.id == 1){
+            const diff = Math.abs(now - props.headingPosition);
+            setColorFilter(255 * (diff < 100 ? diff : 100) * 0.01);
+            if(now < props.headingPosition){
+                posY = now + 0.02 * diff;
+            }
+            else if(now > props.headingPosition){
+                posY = now - 0.02 * diff;
+            }
         }
-        else{
-            setSin(0);
-            setOffsetY(Math.sin(sin)*10);
-        }
-        
-        setDiff(Math.abs(now - props.headingPosition));
-        if(now < props.headingPosition){
-            setNow(now + 0.02 * diff);
-        }
-        else if(now > props.headingPosition){
-            setNow(now - 0.02 * diff);
-        }
-        setColorFilter(255 * (diff<100?diff:100) * 0.01);
-        setPosY(
-            props.id == 1 ? 
-                now + offsetY :
-                props.position[1] + offsetY
-        );
+        imageRef.current.y(posY + move);
     }
 
+    const updateFrameRef = useRef<(frame) => void>(onUpdateFrame);
 
-    const updateFrameRef = useRef<() => void>(updateFrame);
+    let anim = new Konva.Animation(updateFrameRef.current, props.layerRef.current);
+
     useEffect(() => {
-        updateFrameRef.current = updateFrame; // 新しいcallbackをrefに格納！
-    }, [updateFrame]);
+        updateFrameRef.current = onUpdateFrame;
+    }, [props.headingPosition]);
+
+    useEffect(()=>{
+        anim.start();
+        return()=>{
+            anim.stop();
+        }
+    }, [updateFrameRef.current]);
 
     useEffect(()=>{
         if(imageRef.current){
             setCentering(imageRef.current.width()/2);
         }
-        const update = () =>{updateFrameRef.current()}
-        const id = setInterval(update, 33);
-        return()=>{
-            clearInterval(id);
-        }
     }, []);
-    
-    useEffect(() => {
-        if (particleImage) {
-            imageRef.current.cache();
-        }
-    }, [particleImage]);
 
     return (
-        <Image ref={imageRef} filters={[Konva.Filters.RGB]} green={255} blue={props.id==1?colorFilter:255} red={150} opacity={props.opacity} x={props.position[0]-centering} y={posY-centering} width={150*sizeCoeff*(props.id==1?map(colorFilter, 0, 255, 1.5, 1):1)} height={150*sizeCoeff*(props.id==1?map(colorFilter, 0, 255, 1.5, 1):1)} image={particleImage}/>
+        <Image ref={imageRef} offset={{x: 0, y: centering}} filters={[Konva.Filters.RGB]} green={255} blue={props.id==1?colorFilter:255} red={150} opacity={props.opacity} x={props.position[0]-centering} y={props.position[1]-centering} width={150*sizeCoeff*(props.id==1?map(colorFilter, 0, 255, 1.5, 1):1)} height={150*sizeCoeff*(props.id==1?map(colorFilter, 0, 255, 1.5, 1):1)} image={particleImage}/>
     );
 }
 
@@ -99,11 +81,12 @@ const Background: React.FC = () =>{
     const particleImage: HTMLImageElement = document.createElement('img');
     particleImage.src = 'img/particle.png';
     const headingPosition = useContext(HeadingPositionContext);
+    const layerRef = useRef(null);
     
     let positions: Array<[number, number]> = [
-        [windowSize.w*0.15, windowSize.h*0.5],
+        [windowSize.w*0.1, windowSize.h*0.5],
         [windowSize.w*0.4, windowSize.h*0.5],
-        [windowSize.w*0.85, windowSize.h*0.8],
+        [windowSize.w*0.8, windowSize.h*0.8],
     ];
 
     const [opacity, setOpacity] = useState(0);
@@ -140,9 +123,9 @@ const Background: React.FC = () =>{
     return(
         <Wrap>
             <Stage width={windowSize.w} height={windowSize.h}>
-                <Layer>
+                <Layer  ref={layerRef}>
                     <Rect fill={Colors.BLACK} x={0} y={0} width={windowSize.w} height={windowSize.h}/>
-                    {positions.map(((pos, i)=><Particle headingPosition={headingPosition} opacity={opacity} key={i} id={i} position={pos}/>))}
+                    {positions.map(((pos, i)=><Particle layerRef={layerRef} headingPosition={headingPosition} opacity={opacity} key={i} id={i} position={pos}/>))}
                 </Layer>
             </Stage>    
         </Wrap>

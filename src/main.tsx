@@ -87,6 +87,7 @@ const App: React.FC<AppProps> = (props) =>{
         Plan: useRef(null),
         Flow: useRef(null),
         Place: useRef(null),
+        QandA: useRef(null),
         Contact: useRef(null),
     };
     const [headingRefContext, setHeadingRefContext] = useState(headingRefs);

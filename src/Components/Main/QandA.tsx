@@ -10,10 +10,9 @@ type QandAProps = {
 }
 
 const QandA: React.FC<QandAProps> = (props) =>{
-    console.log(props.inViews);
     return(
         <Section ref={props.inViews[0]}>
-            <SectionHeading name='Q&A' sub='よくある質問' imgPath='img/qanda_h.png'/>
+            <SectionHeading name='QandA' sub='よくある質問' imgPath='img/qanda_h.png'/>
             {props.qanda.map((item, i)=>
                 <div key={"qanda_"+i} className="qanda">
                     <Heading3>{item.data.q}</Heading3>
