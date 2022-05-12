@@ -48,7 +48,7 @@ margin-bottom: 20px;
 padding: 10px;
 display: flex;
 align-items: center;
-justify-content: center;
+justify-content: flex-start;
 white-space: pre-wrap;
 //word-break: keep-all;
 //text-align: center;
