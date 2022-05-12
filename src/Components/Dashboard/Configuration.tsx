@@ -29,6 +29,7 @@ const Configuration: React.FC<ConfigProps> = (props) =>{
     
     return(
         <CustomContainer maxWidth="sm">
+            <ConfigCard title='About' dbInfo={{collection: "contents", document: ["siteinfo"]}} defaults={[{title: props.siteinfo.title, about: replaceAllReturns(props.siteinfo.about)}]}/>
             <ConfigCard title='About' dbInfo={{collection: "contents", document: ["siteinfo"]}} defaults={[{about: replaceAllReturns(props.siteinfo.about)}]}/>
             <ConfigCard title='Instructor' annotation={"Twitter、InstagramはIDのみ、YouTube、WebsiteはURLを入力してください！"} dbInfo={{collection: "instructor", document: instructorKeys}} defaults={instructors} />
             <ConfigCard ids={plans.map(item=>item.id)} title='Course' dbInfo={{collection: "plans", document: instructorKeys}} defaults={plans.map(item=>item.data)} />

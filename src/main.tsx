@@ -69,6 +69,7 @@ export const HeadingPositionContext = createContext(null);
 
 const App: React.FC<AppProps> = (props) =>{
     const [instructors, setInstructors] = useState([]);
+    const [title, setTitle] = useState("");
     const [about, setAbout] = useState("");
     const [courses, setCourses] = useState([]);
     const [plans, setPlans] = useState({});
@@ -129,6 +130,7 @@ const App: React.FC<AppProps> = (props) =>{
         });
         getDocFromDb(db, "contents", "siteinfo", (doc) =>{
             setAbout(doc.about);
+            setTitle(doc.title);
             document.title = doc.title;
         });
         getDocsFromDb(db, "plans",  (list) =>{
@@ -188,7 +190,7 @@ const App: React.FC<AppProps> = (props) =>{
                 </Container>
             </Route>
             <Route path="/dashboard">
-                <Dashboard about={about} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA}/>
+                <Dashboard title={title} about={about} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA}/>
             </Route>
         </BrowserRouter>
     );

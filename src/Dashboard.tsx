@@ -14,6 +14,7 @@ const CustomBar = styled(AppBar)({
 
 type DashboardProps = {
     instructors: Array<any>,
+    title: string,
     about: string,
     course: Array<any>,
     plans: Array<any>,
@@ -30,6 +31,7 @@ const Dashboard: React.FC<DashboardProps> = (props) =>{
 
     const siteinfo = {
         instructors: props.instructors,
+        title: props.title,
         about: props.about,
         course: props.course,
         plans: props.plans,
