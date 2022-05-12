@@ -68,6 +68,7 @@ export const HeadingRefContext = createContext(null);
 export const HeadingPositionContext = createContext(null);
 
 const App: React.FC<AppProps> = (props) =>{
+
     const [instructors, setInstructors] = useState([]);
     const [title, setTitle] = useState("");
     const [about, setAbout] = useState("");
@@ -105,7 +106,7 @@ const App: React.FC<AppProps> = (props) =>{
     useEffect(()=>{
         const onScroll = ()=>{
             const refs = Object.values(headingRefContext);
-            const headingPositions = refs.map(ref=>ref.current.getBoundingClientRect().top);
+            const headingPositions = refs.map(ref=>ref.current?.getBoundingClientRect().top);
             for(let i = 0; i < inViews.length; i++){
                 if(inViews[i][1] && i != 0){
                     setInViewNow(i);
@@ -190,7 +191,7 @@ const App: React.FC<AppProps> = (props) =>{
                     </HeadingPositionContext.Provider>
                 </Container>
             </Route>
-            <Route path="/dashboard">
+            <Route exact path="/dashboard">
                 <Dashboard title={title} about={about} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA}/>
             </Route>
         </BrowserRouter>

@@ -45,18 +45,18 @@ const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
         <Card sx={{marginBottom: "50px"}}>
             <Box sx={{padding: 4, fontWeight: "bold"}}><h2>{props.title}</h2></Box>
             {props.annotation?<Box sx={{padding: 4, paddingTop: 0, paddingBottom: 4, fontWeight: "bold"}}><p>{props.annotation}</p></Box>:""}
-            {props.defaults ? props.defaults.map((d)=>{
+            {props.defaults ? props.defaults.map((d, i)=>{
                 const fields: Array<JSX.Element> = [];
                 for(const [key, value] of Object.entries(d)){
                     fields.push(
-                        <CustomBox content={
+                        <CustomBox key={key} content={
                             <TextField type={typeof value == "string" ? "text" : "number"} inputRef={refs[countData]} multiline={value.length > 20} fullWidth label={key} defaultValue={value}/>
                         }/>
                     );
                     countData++;
                 }
                 return(
-                    <Box sx={{marginBottom: 5}}>
+                    <Box key={i} sx={{marginBottom: 5}}>
                         {fields}
                     </Box>
                 );

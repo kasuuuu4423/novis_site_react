@@ -5,7 +5,7 @@ import { styled } from '@mui/material';
 import Login from './Components/Dashboard/Login';
 import Configuration from './Components/Dashboard/Configuration';
 import { User, onAuthStateChanged } from "firebase/auth";
-import { auth } from './Modules/Firebase';
+import { auth, logout } from './Modules/Firebase';
 import Colors from './Cssvars/Colors';
 
 const CustomBar = styled(AppBar)({
@@ -48,7 +48,7 @@ const Dashboard: React.FC<DashboardProps> = (props) =>{
                     {user ? <Typography mr={1} variant="h6" color="inherit" component="div">
                         {user.email}
                     </Typography>:""}
-                    {user ? <Button sx={{margin: "5px 0"}} variant="outlined">Logout</Button>:""}
+                    {user ? <Button onClick={logout} sx={{margin: "5px 0"}} variant="outlined">Logout</Button>:""}
                 </Toolbar>
             </CustomBar >
             {!user ? <Login setUser={setUser}/>:""}
