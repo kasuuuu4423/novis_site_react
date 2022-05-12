@@ -34,8 +34,9 @@ export async function getDocFromDb(db: Firestore, collectionName: string, docume
     }
 }
 
-export async function updateDocFromDb(db: Firestore, collectionName: string, documentName: string, data: {[key: string]: any}){
+export async function updateDocFromDb(db: Firestore, collectionName: string, documentName: string, data: {[key: string]: any}, callback=()=>{}){
     await updateDoc(doc(db, collectionName, documentName), data);
+    callback();
 }
 
 export const auth = getAuth(app);

@@ -1,7 +1,25 @@
 import * as React from "react";
-import { useRef, Ref } from "react";
+import { useRef, useState } from "react";
 import { Card, Box, Button, TextField } from '@mui/material';
 import { db, updateDocFromDb } from '../../Modules/Firebase';
+
+
+type CustomTextFieldProps = {
+    content: JSX.Element,
+};
+
+const CustomBox: React.FC<CustomTextFieldProps> = (props) =>{
+    return(
+        <Box sx={{
+            margin: "auto",
+            padding: 4,
+            paddingTop: 0,
+        }}>
+            {props.content}
+        </Box>
+    );
+}
+
 
 type ConfigCardProps = {
     title: string,
@@ -19,14 +37,7 @@ const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
     let countData = 0;
     const refs: Array<React.MutableRefObject<HTMLInputElement>> = [];
     let keys = [[],[]];
-    
-    const buttonOnClick = () =>{
-        for(let i = 0; i < refs.length; i++){
-            if(refs[i].current) {
-                const res = updateDocFromDb(db, props.dbInfo.collection, props.ids ? props.ids[keys[0][i]] : props.dbInfo.document[keys[0][i]], Object.fromEntries([[keys[1][i], refs[i].current.value]]));
-            }
-        }
-    }
+
     if(props.defaults){
         props.defaults.forEach((d,i)=>{
             let num = Object.values(d).length;
@@ -41,6 +52,22 @@ const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
             refs.push(useRef(null));
         }
     }
+
+
+
+    const onUpdate = (id: number, key: string = "") =>{
+        console.log("Success " + key);
+    }
+    
+    const buttonOnClick = () =>{
+        for(let i = 0; i < refs.length; i++){
+            if(refs[i].current) {
+                const res = updateDocFromDb(db, props.dbInfo.collection, props.ids ? props.ids[keys[0][i]] : props.dbInfo.document[keys[0][i]], Object.fromEntries([[keys[1][i], refs[i].current.value]]), ()=>{onUpdate(i, keys[1][i])});
+            }
+        }
+    }
+
+    
     return(
         <Card sx={{marginBottom: "50px"}}>
             <Box sx={{padding: 4, fontWeight: "bold"}}><h2>{props.title}</h2></Box>
@@ -50,7 +77,9 @@ const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
                 for(const [key, value] of Object.entries(d)){
                     fields.push(
                         <CustomBox key={key} content={
-                            <TextField type={typeof value == "string" ? "text" : "number"} inputRef={refs[countData]} multiline={value.length > 20} fullWidth label={key} defaultValue={value}/>
+                            <div>
+                                <TextField type={typeof value == "string" ? "text" : "number"} inputRef={refs[countData]} multiline={value.length > 20} fullWidth label={key} defaultValue={value}/>
+                            </div>
                         }/>
                     );
                     countData++;
@@ -70,22 +99,6 @@ const ConfigCard: React.FC<ConfigCardProps> = (props) =>{
                 <Button onClick={buttonOnClick} variant="contained">変更</Button>
             </Box>
         </Card>
-    );
-}
-
-type CustomTextFieldProps = {
-    content: JSX.Element,
-};
-
-export const CustomBox: React.FC<CustomTextFieldProps> = (props) =>{
-    return(
-        <Box sx={{
-            margin: "auto",
-            padding: 4,
-            paddingTop: 0,
-        }}>
-            {props.content}
-        </Box>
     );
 }
 
