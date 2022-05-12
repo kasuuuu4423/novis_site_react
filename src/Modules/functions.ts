@@ -1,3 +1,5 @@
+import { isMobile } from 'react-device-detect';
+
 export const replaceAllReturns = (text: string): string =>{
     return text.replace(/\\n/g, '\n');
 }
@@ -39,4 +41,10 @@ export const sortByKeys = (object: Object) =>{
     return newObject;
 }
 
-//export const 
+
+export const getWindowSize = () =>{
+    return {
+        w: isMobile ? window.screen.width : document.documentElement.clientWidth,
+        h: isMobile ? window.screen.height : document.documentElement.clientHeight,
+    };
+}

@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { useEffect, useRef, useState, Suspense, useCallback, useContext } from 'react';
 import styled from '@emotion/styled';
-import { map } from "../../Modules/functions";
+import { map, getWindowSize } from "../../Modules/functions";
 import { HeadingPositionContext } from '../../main';
 import Colors from '../../Cssvars/Colors';
 import Konva from 'konva';
 import { Layer, Stage, Rect, Image } from 'react-konva';
-import { isMobile } from 'react-device-detect';
 
 
 type ParticleProps = {
@@ -106,15 +105,6 @@ const Background: React.FC = () =>{
             window.removeEventListener('scroll', isScroll);
         });
     }, []);
-
-    const getWindowSize = () =>{
-        return {
-            // w: window.innerWidth,
-            // h: window.innerHeight,
-            w: isMobile ? window.screen.width : document.documentElement.clientWidth,
-            h: isMobile ? window.screen.height : document.documentElement.clientHeight,
-        };
-    }
 
     useEffect(()=>{
         setWindowSize(getWindowSize());
