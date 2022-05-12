@@ -134,6 +134,7 @@ const App: React.FC<AppProps> = (props) =>{
             setAbout(doc.about);
             setTitle(doc.title);
             document.title = doc.title;
+            document.querySelector('meta[name="description"]').setAttribute('content', doc.about);
         });
         getDocsFromDb(db, "plans",  (list) =>{
             let p = {};
