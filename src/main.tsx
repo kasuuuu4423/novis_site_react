@@ -98,7 +98,7 @@ const App: React.FC<AppProps> = (props) =>{
         inViews[i] = useInView({
             root: null,
             rootMargin: '0px',
-            threshold: .5,
+            threshold: .45,
         });
     }
 
