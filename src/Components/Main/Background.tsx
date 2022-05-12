@@ -86,7 +86,7 @@ const Background: React.FC = () =>{
     let positions: Array<[number, number]> = [
         [windowSize.w*0.1, windowSize.h*0.5],
         [windowSize.w*0.4, windowSize.h*0.5],
-        [windowSize.w*0.8, windowSize.h*0.8],
+        [windowSize.w*0.9, windowSize.h*0.8],
     ];
 
     const [opacity, setOpacity] = useState(0);
