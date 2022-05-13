@@ -190,6 +190,7 @@ const App: React.FC<AppProps> = (props) =>{
                     <HeadingPositionContext.Provider value={headingPosition}>
                         <Background/>
                     </HeadingPositionContext.Provider>
+                    <div className='text-center'>©Novis 2022</div>
                 </Container>
             </Route>
             <Route exact path="/dashboard">
