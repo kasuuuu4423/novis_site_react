@@ -113,7 +113,7 @@ const Contact: React.FC<ContactProps> = (props) =>{
                 <label className="toggle" htmlFor="apply"><input name='cat' type="radio" id="apply" value="apply" checked={isApply} onChange={()=>{changeIsApply(true)}}/>お申し込み</label>
                 <label className="toggle" htmlFor="contact"><input name='cat' type="radio" id="contact" value="contact" checked={!isApply} onChange={()=>{changeIsApply(false)}}/>お問い合わせ</label>
                 <InputWrap><input {...register("name"), { required: true, maxLength: 20 }} name="name" type="text" placeholder='名前' /></InputWrap>
-                <InputWrap><input {...register("email"), { required: true, maxLength: 50, pattern: "/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" }} type="email" name='email' placeholder='メールアドレス' /></InputWrap>
+                <InputWrap><input {...register("email"), { required: true, maxLength: 50 }} type="email" name='email' placeholder='メールアドレス' /></InputWrap>
                 
                 <div className={isApply?"form_apply":"form_apply d-none"}>
                     <InputWrap><input name='age' type="text" placeholder='年齢（学年）' /></InputWrap>
