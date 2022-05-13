@@ -71,8 +71,13 @@ DISPLAY
     }
 }
 
-.d-none{
-    display: none!important;
+.d{
+    &-none{
+        display: none!important;
+    }
+    &-block{
+        display: block !important;
+    }
 } 
 
 /*

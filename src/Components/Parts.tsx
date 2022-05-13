@@ -151,3 +151,19 @@ export const _White = styled.div<_WhiteProps>`
         display: none;
     `:""}
 `;
+
+type AnchorNewTabProps = {
+    path: string,
+    content: string | JSX.Element,
+}
+export const AnchorNewTab: React.FC<AnchorNewTabProps> = (props) =>{
+    return <a href={props.path} target="_blank" rel="noopener noreferrer">{props.content}</a>
+}
+
+export const SNS: React.FC = () =>{
+    return <span>
+        <AnchorNewTab path="https://twitter.com/novis_guru" content={<i className="icon-circle mr-1 fa-brands fa-twitter"></i>}/>
+        <AnchorNewTab path="https://www.instagram.com/novis.guru/" content={<i className="icon-circle mr-1 fa-brands fa-instagram"></i>}/>
+        <AnchorNewTab path="https://www.youtube.com/channel/UCPTmcNcShZLvvL--aGE08nw" content={<i className="icon-circle fa-brands fa-youtube"></i>}/>
+    </span>
+}

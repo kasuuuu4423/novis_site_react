@@ -18,7 +18,7 @@ import { useInView } from 'react-intersection-observer';
 import { getDocsFromDb, getDocFromDb } from './Modules/Firebase';
 import { BrowserRouter,  Route } from 'react-router-dom';
 import { db } from './Modules/Firebase';
-import { White } from './Components/Parts';
+import { White, SNS } from './Components/Parts';
 
 
 const Container = styled.div`
@@ -159,8 +159,11 @@ const App: React.FC<AppProps> = (props) =>{
         <section ref={inViews[0][0]} className="top relative">
             <h2 ref={headingRefs["Top"]} style={{opacity: 0, position: "absolute"}}></h2>
             <BG className='absolute-center' src="./img/bg.png" alt="背景" />
-            <img style={{transform: "translate(-51%, -50%)"}} className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
-            <div className="absolute-center-x top-80 font-m font-weight-100">Beatbox Lesson Studio</div>
+            <img style={{transform: "translate(-51%, -100%)"}} className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
+            <div className="absolute-center-x text-center top-70 font-m font-weight-100">
+                <span className='d-block mb-1'>Beatbox Lesson Studio</span><br/>
+                <SNS/>
+            </div>
         </section>,
         <section ref={inViews[1][0]} className="video">
             <h2 ref={headingRefs["Video"]} style={{opacity: 0, position: "absolute"}}></h2>
@@ -190,6 +193,7 @@ const App: React.FC<AppProps> = (props) =>{
                     <HeadingPositionContext.Provider value={headingPosition}>
                         <Background/>
                     </HeadingPositionContext.Provider>
+                    <div className='text-center'><SNS/></div>
                     <div className='text-center'>©Novis 2022</div>
                 </Container>
             </Route>
