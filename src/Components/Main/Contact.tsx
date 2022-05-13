@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import styled, {css} from "styled-components";
+import { useForm } from 'react-hook-form';
 import Colors from '../../Cssvars/Colors';
 import FontSize from '../../Cssvars/FontSize';
 import { SectionHeading } from "../Parts";
@@ -87,6 +88,7 @@ const Contact: React.FC<ContactProps> = (props) =>{
     const [isSend, setIsSend] = useState(false);
     const [formHidden, setFormHidden] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
+    const { register, handleSubmit } = useForm();
 
     const onSubmit = () =>{
         if((formRef.current)){
@@ -101,36 +103,29 @@ const Contact: React.FC<ContactProps> = (props) =>{
             sendForm(addedCat, ()=>{
                 setIsSend(true);
             });
-            // disabled.value = true;
-            // if(!(form.name && form.email && form.content)){
-            //     showMessage("danger", "必須内容が入力されていません");
-            //     disabled.value = false;
-            //     return;
-            // }
-            
         }
     }
 
     return (
         <Section formHidden={formHidden} ref={props.inViews[0]} className="Contact">
             <SectionHeading name="Contact" sub="" imgPath="./img/contact_h.png"/>
-            {!formHidden?<form ref={formRef}>
+            {!formHidden?<form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
                 <label className="toggle" htmlFor="apply"><input name='cat' type="radio" id="apply" value="apply" checked={isApply} onChange={()=>{changeIsApply(true)}}/>お申し込み</label>
                 <label className="toggle" htmlFor="contact"><input name='cat' type="radio" id="contact" value="contact" checked={!isApply} onChange={()=>{changeIsApply(false)}}/>お問い合わせ</label>
-                <InputWrap><input name="name" type="text" placeholder='名前' /></InputWrap>
-                <InputWrap><input type="email" name='email' placeholder='メールアドレス' /></InputWrap>
+                <InputWrap><input {...register("name"), { required: true, maxLength: 20 }} name="name" type="text" placeholder='名前' /></InputWrap>
+                <InputWrap><input {...register("email"), { required: true, maxLength: 50, pattern: "/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" }} type="email" name='email' placeholder='メールアドレス' /></InputWrap>
                 
                 <div className={isApply?"form_apply":"form_apply d-none"}>
                     <InputWrap><input name='age' type="text" placeholder='年齢（学年）' /></InputWrap>
                     <InputWrap>
-                        <select name="instructor" id="instructor">
+                        <select {...register("instructor")} name="instructor" id="instructor">
                             <option hidden>希望講師 ▽</option>
                             <option value="TATSUAKI">TATSUAKI</option>
                             <option value="YUTA">YUTA</option>
                         </select>
                     </InputWrap>
                     <InputWrap>
-                        <select name="plan" id="plan">
+                        <select {...register("plan")} name="plan" id="plan">
                             <option hidden>希望コース ▽</option>
                             <option value="単発1回">単発1回</option>
                             <option value="1ヶ月（4回）">1ヶ月（4回）</option>
@@ -139,11 +134,10 @@ const Contact: React.FC<ContactProps> = (props) =>{
                 </div>
                 <div className={!isApply?"form_contact":"form_contact d-none"}>
                     <InputWrap>
-                        <textarea placeholder='お問い合わせ内容' name="content" id="" cols={30} rows={7}></textarea>
+                        <textarea {...register("content")} placeholder='お問い合わせ内容' name="content" id="" cols={30} rows={7}></textarea>
                     </InputWrap>
                 </div>
-                
-                <button type='button' onClick={onSubmit} className='send'>送信</button>
+                <button type='submit' className='send'>送信</button>
             </form>
             :
             isSend ?
