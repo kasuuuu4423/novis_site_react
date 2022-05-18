@@ -168,7 +168,7 @@ const App: React.FC<AppProps> = (props) =>{
         <section ref={inViews[1][0]} className="video">
             <h2 ref={headingRefs["Video"]} style={{opacity: 0, position: "absolute"}}></h2>
             <div className="iframe-169">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/cG7MiBXO6QA" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                <iframe loading='lazy' width="560" height="315" src="https://www.youtube.com/embed/cG7MiBXO6QA" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
             </div>
         </section>,
         <About text={about} inViews={inViews[2]}/>,
