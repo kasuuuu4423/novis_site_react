@@ -37,7 +37,7 @@ export const RadiusBoxText = styled.div<{isSmall: boolean}>`
     width: 70%;
     text-align: center;
     margin-bottom: 10px;
-    ${Mixin.media("md", "margin-bottom: 0px;")}
+    ${Mixin.media("md", "margin-bottom: 10px;")}
     ${Mixin.media("md", "width: 45%;")}
     ${Mixin.media("md", "max-width: 400px;")}
 `;
