@@ -29,6 +29,19 @@ export const Heading3 = styled.h3`
     margin-bottom: 20px;
 `;
 
+export const ScrollParagraph = styled.p<{
+    height: string,
+    width: string,
+    x: boolean,
+    y: boolean
+}>`
+    height: ${props => props.height};
+    width: ${props => props.width};
+    overflow-x: ${props => props.x ? "scroll" : "visible"};
+    overflow-y: ${props => props.y ? "scroll" : "visible"};
+    white-space: pre-wrap;
+`;
+
 export const RadiusBoxText = styled.div<{isSmall: boolean}>`
     background: ${Colors.WHITE};
     color: ${Colors.BLACK};

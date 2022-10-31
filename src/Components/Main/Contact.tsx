@@ -4,7 +4,7 @@ import styled, {css} from "styled-components";
 import { useForm } from 'react-hook-form';
 import Colors from '../../Cssvars/Colors';
 import FontSize from '../../Cssvars/FontSize';
-import { SectionHeading } from "../Parts";
+import { SectionHeading, Heading3, ScrollParagraph } from "../Parts";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { sendForm } from "../../Modules/Firebase";
 import { Loading } from "../Parts";
@@ -12,6 +12,7 @@ import { Loading } from "../Parts";
 
 type ContactProps = {
     inViews: Array<any>,
+    privacyPolicy: string,
 };
 
 type SectionProps = {
@@ -150,6 +151,11 @@ const Contact: React.FC<ContactProps> = (props) =>{
                     <Loading/>
                 </div>
             }
+            <div className="mb-3"></div>
+            <Heading3>プライバシーポリシー</Heading3>
+            <ScrollParagraph width="100%" height="500px" y={true} >
+                {props.privacyPolicy}
+            </ScrollParagraph>
         </Section>
     );
 }

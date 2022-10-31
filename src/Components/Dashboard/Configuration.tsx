@@ -27,10 +27,29 @@ const Configuration: React.FC<ConfigProps> = (props) =>{
     
     return(
         <CustomContainer maxWidth="sm">
-            <ConfigCard title='SiteInfo' dbInfo={{collection: "contents", document: ["siteinfo"]}} defaults={[{title: props.siteinfo.title, about: replaceAllReturns(props.siteinfo.about)}]}/>
-            <ConfigCard title='Instructor' annotation={"Twitter、InstagramはIDのみ、YouTube、WebsiteはURLを入力してください！"} dbInfo={{collection: "instructor", document: instructorKeys}} defaults={instructors} />
-            <ConfigCard ids={plans.map(item=>item.id)} title='Course' dbInfo={{collection: "plans", document: instructorKeys}} defaults={plans.map(item=>item.data)} />
-            <ConfigCard ids={props.siteinfo.qanda.map(item=>item.id)} title='Q&A' dbInfo={{collection: "qanda", document: qandaIds}} defaults={props.siteinfo.qanda.map(item=>item.data)} />
+            <ConfigCard
+                title='SiteInfo'
+                dbInfo={{collection: "contents", document: ["siteinfo"]}}
+                defaults={[{
+                    title: props.siteinfo.title,
+                    about: replaceAllReturns(props.siteinfo.about),
+                    privacyPolicy: replaceAllReturns(props.siteinfo.privacyPolicy)}]
+                }/>
+            <ConfigCard
+                title='Instructor'
+                annotation={"Twitter、InstagramはIDのみ、YouTube、WebsiteはURLを入力してください！"}
+                dbInfo={{collection: "instructor", document: instructorKeys}}
+                defaults={instructors} />
+            <ConfigCard
+                ids={plans.map(item=>item.id)}
+                title='Course'
+                dbInfo={{collection: "plans", document: instructorKeys}}
+                defaults={plans.map(item=>item.data)} />
+            <ConfigCard
+                ids={props.siteinfo.qanda.map(item=>item.id)}
+                title='Q&A'
+                dbInfo={{collection: "qanda", document: qandaIds}}
+                defaults={props.siteinfo.qanda.map(item=>item.data)} />
         </CustomContainer>
     );
 }

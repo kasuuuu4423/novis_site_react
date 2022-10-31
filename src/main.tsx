@@ -72,6 +72,7 @@ const App: React.FC<AppProps> = (props) =>{
     const [instructors, setInstructors] = useState([]);
     const [title, setTitle] = useState("");
     const [about, setAbout] = useState("");
+    const [privacyPolicy, setPrivacyPolicy] = useState("");
     const [courses, setCourses] = useState([]);
     const [plans, setPlans] = useState({});
     const [plansOrgn, setPlansOrgn] = useState([]);
@@ -133,6 +134,7 @@ const App: React.FC<AppProps> = (props) =>{
         getDocFromDb(db, "contents", "siteinfo", (doc) =>{
             setAbout(doc.about);
             setTitle(doc.title);
+            setPrivacyPolicy(doc.privacyPolicy);
             document.title = doc.title;
             document.querySelector('meta[name="description"]').setAttribute('content', doc.about);
         });
@@ -177,7 +179,7 @@ const App: React.FC<AppProps> = (props) =>{
         <Flow inViews={inViews[5]}/>,
         <Place inViews={inViews[6]}/>,
         <QandA qanda={qAndA} inViews={inViews[7]}/>,
-        <Contact inViews={inViews[8]}/>,
+        <Contact privacyPolicy={privacyPolicy} inViews={inViews[8]}/>,
     ];
     return (
         <BrowserRouter>
@@ -198,7 +200,7 @@ const App: React.FC<AppProps> = (props) =>{
                 </Container>
             </Route>
             <Route exact path="/dashboard">
-                <Dashboard title={title} about={about} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA}/>
+                <Dashboard title={title} about={about} privacyPolicy={privacyPolicy} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA}/>
             </Route>
         </BrowserRouter>
     );
