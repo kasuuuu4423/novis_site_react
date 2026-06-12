@@ -113,8 +113,8 @@ const Contact: React.FC<ContactProps> = (props) =>{
             {!formHidden?<form onSubmit={handleSubmit(onSubmit)} ref={formRef}>
                 <label className="toggle" htmlFor="apply"><input name='cat' type="radio" id="apply" value="apply" checked={isApply} onChange={()=>{changeIsApply(true)}}/>お申し込み</label>
                 <label className="toggle" htmlFor="contact"><input name='cat' type="radio" id="contact" value="contact" checked={!isApply} onChange={()=>{changeIsApply(false)}}/>お問い合わせ</label>
-                <InputWrap><input {...register("name"), { required: true, maxLength: 20 }} name="name" type="text" placeholder='名前' /></InputWrap>
-                <InputWrap><input {...register("email"), { required: true, maxLength: 50 }} type="email" name='email' placeholder='メールアドレス' /></InputWrap>
+                <InputWrap><input {...register("name", { required: true, maxLength: 20 })} type="text" placeholder='名前' /></InputWrap>
+                <InputWrap><input {...register("email", { required: true, maxLength: 50 })} type="email" placeholder='メールアドレス' /></InputWrap>
                 
                 <div className={isApply?"form_apply":"form_apply d-none"}>
                     <InputWrap><input name='age' type="text" placeholder='年齢（学年）' /></InputWrap>
@@ -153,7 +153,7 @@ const Contact: React.FC<ContactProps> = (props) =>{
             }
             <div className="mb-3"></div>
             <Heading3>プライバシーポリシー</Heading3>
-            <ScrollParagraph width="100%" height="500px" y={true} >
+            <ScrollParagraph $width="100%" $height="500px" $y={true} >
                 {props.privacyPolicy}
             </ScrollParagraph>
         </Section>

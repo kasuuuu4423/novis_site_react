@@ -1422,19 +1422,22 @@ TEXT
 .icon-circle {
   color: #000;
   background-color: #fff;
-  font-size: 1.2rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  font-size: 1.25rem;
+  width: 26px;
+  height: 26px;
   border-radius: 100%;
-  position: relative;
+  display: -ms-inline-grid;
+  display: inline-grid;
+  place-items: center;
+  vertical-align: middle;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+  line-height: 1;
 }
 
 .icon-circle::before {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
+  grid-area: 1 / 1;
+  line-height: 1;
 }
 
 /*

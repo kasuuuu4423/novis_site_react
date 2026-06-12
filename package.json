@@ -5,22 +5,22 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "watch": "webpack -w"
+    "dev": "vite",
+    "prebuild": "node scripts/ensure-config.js",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^22.15.21",
+    "@vitejs/plugin-react": "^4.5.0",
     "axios": "^0.26.0",
-    "file-loader": "^6.2.0",
-    "hard-source-webpack-plugin": "^0.13.1",
     "react-router-dom": "^5.3.1",
     "styled-components": "^5.3.3",
-    "ts-loader": "^9.2.7",
     "typescript": "^4.6.2",
-    "webpack": "^5.70.0",
-    "webpack-cli": "^4.9.2"
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -36,6 +36,7 @@
     "firebase-functions": "^3.20.1",
     "install": "^0.13.0",
     "konva": "^8.3.6",
+    "microcms-js-sdk": "^3.4.0",
     "npm": "^8.8.0",
     "react": "^17.0.2",
     "react-device-detect": "^2.2.2",
@@ -43,7 +44,6 @@
     "react-hook-form": "^7.31.1",
     "react-intersection-observer": "^9.0.0",
     "react-konva": "^17.0.2-6",
-    "react-scroll": "^1.8.7",
-    "webpack-bundle-analyzer": "^4.5.0"
+    "react-scroll": "^1.8.7"
   }
 }
