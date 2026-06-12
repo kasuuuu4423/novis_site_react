@@ -16,7 +16,7 @@ import Background from './Components/Main/Background';
 import Dashboard from './Dashboard';
 import { useInView } from 'react-intersection-observer';
 import { getDocsFromDb, getDocFromDb } from './Modules/Firebase';
-import { BrowserRouter,  Route } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { db } from './Modules/Firebase';
 import { White, SNS } from './Components/Parts';
 
@@ -62,12 +62,15 @@ type AppProps = {
 
 const BG = styled.img`
     //mix-blend-mode: lighten;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 `;
 
 export const HeadingRefContext = createContext(null);
 export const HeadingPositionContext = createContext(null);
 
-const App: React.FC<AppProps> = (props) =>{
+const App: React.FC<AppProps> = (props) => {
 
     const [instructors, setInstructors] = useState([]);
     const [title, setTitle] = useState("");
@@ -81,7 +84,7 @@ const App: React.FC<AppProps> = (props) =>{
     const [inViewNow, setInViewNow] = useState(0);
     const [isLoad, setIsLoad] = useState(false);
 
-    const headingRefs: {[key: string]: React.MutableRefObject<HTMLHeadingElement>} = {
+    const headingRefs: { [key: string]: React.MutableRefObject<HTMLHeadingElement> } = {
         Top: useRef(null),
         Video: useRef(null),
         About: useRef(null),
@@ -96,7 +99,7 @@ const App: React.FC<AppProps> = (props) =>{
 
     const numSections = 9;
     let inViews = [];
-    for(let i = 0; i < numSections; i++){
+    for (let i = 0; i < numSections; i++) {
         inViews[i] = useInView({
             root: null,
             rootMargin: '0px',
@@ -104,12 +107,12 @@ const App: React.FC<AppProps> = (props) =>{
         });
     }
 
-    useEffect(()=>{
-        const onScroll = ()=>{
+    useEffect(() => {
+        const onScroll = () => {
             const refs = Object.values(headingRefContext);
-            const headingPositions = refs.map(ref=>ref.current?.getBoundingClientRect().top);
-            for(let i = 0; i < inViews.length; i++){
-                if(inViews[i][1] && i != 0){
+            const headingPositions = refs.map(ref => ref.current?.getBoundingClientRect().top);
+            for (let i = 0; i < inViews.length; i++) {
+                if (inViews[i][1] && i != 0) {
                     setInViewNow(i);
                     break;
                 }
@@ -117,31 +120,31 @@ const App: React.FC<AppProps> = (props) =>{
             setHeadingPosition(headingPositions[inViewNow]);
         }
 
-        window.addEventListener("scroll", onScroll, {passive: true});
-        return ()=>{
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => {
             window.removeEventListener("scroll", onScroll);
         }
     }, [inViews]);
 
-    useEffect(()=>{
-        getDocsFromDb(db, "instructor", (list) =>{
-            setInstructors(list.map(item=>item.data));
-            const pd = list.map(item=>item.data).map((inst: {[key: string]: string})=>{
+    useEffect(() => {
+        getDocsFromDb(db, "instructor", (list) => {
+            setInstructors(list.map(item => item.data));
+            const pd = list.map(item => item.data).map((inst: { [key: string]: string }) => {
                 return [inst.name, inst.plan_description];
             });
             setCourses(pd);
         });
-        getDocFromDb(db, "contents", "siteinfo", (doc) =>{
+        getDocFromDb(db, "contents", "siteinfo", (doc) => {
             setAbout(doc.about);
             setTitle(doc.title);
             setPrivacyPolicy(doc.privacyPolicy);
             document.title = doc.title;
             document.querySelector('meta[name="description"]').setAttribute('content', doc.about);
         });
-        getDocsFromDb(db, "plans",  (list) =>{
+        getDocsFromDb(db, "plans", (list) => {
             let p = {};
-            list.map(item=>item.data).forEach((plan: {[key: string]: string | number}) =>{
-                if(!Array.isArray(p[plan.instructor])) p[plan.instructor] = [];
+            list.map(item => item.data).forEach((plan: { [key: string]: string | number }) => {
+                if (!Array.isArray(p[plan.instructor])) p[plan.instructor] = [];
                 p[plan.instructor].push({
                     price: plan.price,
                     text: plan.text,
@@ -151,7 +154,7 @@ const App: React.FC<AppProps> = (props) =>{
             setPlansOrgn(list);
             setPlans(p);
         });
-        getDocsFromDb(db, "qanda",  (list) =>{
+        getDocsFromDb(db, "qanda", (list) => {
             setQAndA(list);
             setIsLoad(true);
         });
@@ -159,27 +162,27 @@ const App: React.FC<AppProps> = (props) =>{
 
     const sections = [
         <section key="top" ref={inViews[0][0]} className="top relative">
-            <h2 ref={headingRefs["Top"]} style={{opacity: 0, position: "absolute"}}></h2>
+            <h2 ref={headingRefs["Top"]} style={{ opacity: 0, position: "absolute" }}></h2>
             <BG className='absolute-center' src="./img/bg.png" alt="背景" />
-            <img style={{transform: "translate(-51%, -100%)"}} className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
+            <img style={{ transform: "translate(-51%, -100%)" }} className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis" />
             <div className="absolute-center-x text-center top-70 font-m font-weight-100">
-                <span className='d-block mb-1'>Beatbox Lesson Studio</span><br/>
-                <SNS/>
+                <span className='d-block mb-1'>Beatbox Lesson Studio</span><br />
+                <SNS />
             </div>
         </section>,
         <section key="video" ref={inViews[1][0]} className="video">
-            <h2 ref={headingRefs["Video"]} style={{opacity: 0, position: "absolute"}}></h2>
+            <h2 ref={headingRefs["Video"]} style={{ opacity: 0, position: "absolute" }}></h2>
             <div className="iframe-169">
                 <iframe loading='lazy' width="560" height="315" src="https://www.youtube.com/embed/cG7MiBXO6QA" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
             </div>
         </section>,
-        <About key="about" text={about} inViews={inViews[2]}/>,
-        <Instructor key="instructor" instructors={instructors} inViews={inViews[3]}/>,
-        <Plan key="plan" course={courses} plans={plans} inViews={inViews[4]}/>,
-        <Flow key="flow" inViews={inViews[5]}/>,
-        <Place key="place" inViews={inViews[6]}/>,
-        <QandA key="qanda" qanda={qAndA} inViews={inViews[7]}/>,
-        <Contact key="contact" privacyPolicy={privacyPolicy} inViews={inViews[8]}/>,
+        <About key="about" text={about} inViews={inViews[2]} />,
+        <Instructor key="instructor" instructors={instructors} inViews={inViews[3]} />,
+        <Plan key="plan" course={courses} plans={plans} inViews={inViews[4]} />,
+        <Flow key="flow" inViews={inViews[5]} />,
+        <Place key="place" inViews={inViews[6]} />,
+        <QandA key="qanda" qanda={qAndA} inViews={inViews[7]} />,
+        <Contact key="contact" privacyPolicy={privacyPolicy} inViews={inViews[8]} />,
     ];
     return (
         <BrowserRouter>
@@ -193,17 +196,17 @@ const App: React.FC<AppProps> = (props) =>{
                         </HeadingRefContext.Provider>
                     </main>
                     <HeadingPositionContext.Provider value={headingPosition}>
-                        <Background/>
+                        <Background />
                     </HeadingPositionContext.Provider>
-                    <div className='text-center'><SNS/></div>
+                    <div className='text-center'><SNS /></div>
                     <div className='text-center'>©Novis 2022</div>
                 </Container>
             </Route>
             <Route exact path="/dashboard">
-                <Dashboard title={title} about={about} privacyPolicy={privacyPolicy} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA}/>
+                <Dashboard title={title} about={about} privacyPolicy={privacyPolicy} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA} />
             </Route>
         </BrowserRouter>
     );
 }
 
-ReactDOM.render(<App key="Novis"/>, document.querySelector('#app'));
+ReactDOM.render(<App key="Novis" />, document.querySelector('#app'));
