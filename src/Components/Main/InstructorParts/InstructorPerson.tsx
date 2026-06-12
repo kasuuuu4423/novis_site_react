@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import styled, {css} from "styled-components";
 import { Scrollbar, scrollDuration } from "../../Parts";
+import { SnsLink, SnsType } from "../../SnsLink";
 import { Link, animateScroll as Scroll } from "react-scroll";
 import Colors from '../../../Cssvars/Colors';
 
@@ -20,6 +21,13 @@ type InstructorPersonProps = {
 const Text = styled.p`
     white-space: pre-wrap;
 `;
+
+const INSTRUCTOR_SNS_LINKS: Array<{ type: SnsType; className: string; hrefKey: 'sns_x' | 'sns_instagram' | 'sns_youtube' | 'website' }> = [
+    { type: 'x', className: 'x', hrefKey: 'sns_x' },
+    { type: 'instagram', className: 'instagram', hrefKey: 'sns_instagram' },
+    { type: 'youtube', className: 'youtube', hrefKey: 'sns_youtube' },
+    { type: 'website', className: 'website', hrefKey: 'website' },
+];
 
 const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
     const [descHeight, setDescHeight] = useState(0);
@@ -98,30 +106,16 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
                 </div>
                 <Scrollbar id={props.id} top={scrollbarTop} left={scrollbarLeft} scrollThumbTop={scrollPosition} boxHeight={descHeight} textHeight={textHeight}/>
                 <div className="sns">
-                        {props.sns_x ? <div className="twitter">
-                            <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={props.sns_x}>
-                                <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-brands fa-twitter"></i><span>Twitter</span></div>
-                            </a>
-                        </div> : ""}
-                        {props.sns_instagram ? <div className="instagram">
-                            <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={props.sns_instagram}>
-                                <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-brands fa-instagram"></i><span>Instagram</span></div>
-                            </a>
-                        </div> : ""}
-                        {props.sns_youtube ? <div className="youtube">
-                            <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={props.sns_youtube}>
-                                <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-brands fa-youtube"></i><span>YouTube</span></div>
-                            </a>
-                        </div> : ""}
-                        {props.website ? <div className="website">
-                            <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={props.website}>
-                                <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-solid fa-globe"></i><span>Website</span></div>
-                            </a>
-                        </div> : ""}
+                        {INSTRUCTOR_SNS_LINKS.map(({ type, className, hrefKey }) => {
+                            const href = props[hrefKey];
+                            if (!href) return null;
+                            return (
+                                <div key={type} className={className}>
+                                    <div className="empty"></div>
+                                    <SnsLink type={type} href={href} showLabel />
+                                </div>
+                            );
+                        })}
                         <div style={{color: Colors.BLUE, textAlign: 'right',}}><Link smooth="easeInOutQuint" duration={scrollDuration} offset={-50} style={{cursor: "pointer"}} to={"plan_"+props.name}>{props.name}のレッスンコース→</Link></div>
                 </div>
             </div>
