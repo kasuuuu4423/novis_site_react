@@ -153,7 +153,7 @@ const Contact: React.FC<ContactProps> = (props) =>{
             }
             <div className="mb-3"></div>
             <Heading3>プライバシーポリシー</Heading3>
-            <ScrollParagraph width="100%" height="500px" y={true} >
+            <ScrollParagraph $width="100%" $height="500px" $y={true} >
                 {props.privacyPolicy}
             </ScrollParagraph>
         </Section>

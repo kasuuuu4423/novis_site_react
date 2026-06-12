@@ -158,7 +158,7 @@ const App: React.FC<AppProps> = (props) =>{
     }, []);
 
     const sections = [
-        <section ref={inViews[0][0]} className="top relative">
+        <section key="top" ref={inViews[0][0]} className="top relative">
             <h2 ref={headingRefs["Top"]} style={{opacity: 0, position: "absolute"}}></h2>
             <BG className='absolute-center' src="./img/bg.png" alt="背景" />
             <img style={{transform: "translate(-51%, -100%)"}} className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis"/>
@@ -167,19 +167,19 @@ const App: React.FC<AppProps> = (props) =>{
                 <SNS/>
             </div>
         </section>,
-        <section ref={inViews[1][0]} className="video">
+        <section key="video" ref={inViews[1][0]} className="video">
             <h2 ref={headingRefs["Video"]} style={{opacity: 0, position: "absolute"}}></h2>
             <div className="iframe-169">
                 <iframe loading='lazy' width="560" height="315" src="https://www.youtube.com/embed/cG7MiBXO6QA" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
             </div>
         </section>,
-        <About text={about} inViews={inViews[2]}/>,
-        <Instructor instructors={instructors} inViews={inViews[3]}/>,
-        <Plan course={courses} plans={plans} inViews={inViews[4]}/>,
-        <Flow inViews={inViews[5]}/>,
-        <Place inViews={inViews[6]}/>,
-        <QandA qanda={qAndA} inViews={inViews[7]}/>,
-        <Contact privacyPolicy={privacyPolicy} inViews={inViews[8]}/>,
+        <About key="about" text={about} inViews={inViews[2]}/>,
+        <Instructor key="instructor" instructors={instructors} inViews={inViews[3]}/>,
+        <Plan key="plan" course={courses} plans={plans} inViews={inViews[4]}/>,
+        <Flow key="flow" inViews={inViews[5]}/>,
+        <Place key="place" inViews={inViews[6]}/>,
+        <QandA key="qanda" qanda={qAndA} inViews={inViews[7]}/>,
+        <Contact key="contact" privacyPolicy={privacyPolicy} inViews={inViews[8]}/>,
     ];
     return (
         <BrowserRouter>

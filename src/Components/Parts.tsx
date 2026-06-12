@@ -30,15 +30,15 @@ export const Heading3 = styled.h3`
 `;
 
 export const ScrollParagraph = styled.p<{
-    height: string,
-    width: string,
-    x: boolean,
-    y: boolean
+    $height: string,
+    $width: string,
+    $x?: boolean,
+    $y?: boolean
 }>`
-    height: ${props => props.height};
-    width: ${props => props.width};
-    overflow-x: ${props => props.x ? "scroll" : "visible"};
-    overflow-y: ${props => props.y ? "scroll" : "visible"};
+    height: ${props => props.$height};
+    width: ${props => props.$width};
+    overflow-x: ${props => props.$x ? "scroll" : "visible"};
+    overflow-y: ${props => props.$y ? "scroll" : "visible"};
     white-space: pre-wrap;
 `;
 
