@@ -13,11 +13,23 @@ import Flow from './Components/Main/Flow';
 import QandA from './Components/Main/QandA';
 import Contact from './Components/Main/Contact';
 import Background from './Components/Main/Background';
-import Dashboard from './Dashboard';
 import { useInView } from 'react-intersection-observer';
-import { getDocsFromDb, getDocFromDb } from './Modules/Firebase';
+import {
+    fetchSetting,
+    fetchInstructors,
+    fetchCourses,
+    fetchPlans,
+    fetchQandA,
+    buildCourseViews,
+    buildPlaceView,
+    buildSnsView,
+    buildStudioFee,
+    CourseView,
+    PlaceView,
+    SnsView,
+    StudioFeeView,
+} from './Modules/Microcms';
 import { BrowserRouter, Route } from 'react-router-dom';
-import { db } from './Modules/Firebase';
 import { White, SNS } from './Components/Parts';
 
 
@@ -73,13 +85,15 @@ export const HeadingPositionContext = createContext(null);
 const App: React.FC<AppProps> = (props) => {
 
     const [instructors, setInstructors] = useState([]);
-    const [title, setTitle] = useState("");
     const [about, setAbout] = useState("");
     const [privacyPolicy, setPrivacyPolicy] = useState("");
-    const [courses, setCourses] = useState([]);
-    const [plans, setPlans] = useState({});
-    const [plansOrgn, setPlansOrgn] = useState([]);
+    const [courses, setCourses] = useState<CourseView[]>([]);
     const [qAndA, setQAndA] = useState([]);
+    const [pvUrl, setPvUrl] = useState("");
+    const [place, setPlace] = useState<PlaceView>({});
+    const [sns, setSns] = useState<SnsView>({});
+    const [studioJoin, setStudioJoin] = useState<StudioFeeView>({ text: "（初回・必要な場合のみ）", price: 700 });
+    const [studioPrice, setStudioPrice] = useState<StudioFeeView>({ text: "（1回あたり）", price: 360 });
     const [headingPosition, setHeadingPosition] = useState(0);
     const [inViewNow, setInViewNow] = useState(0);
     const [isLoad, setIsLoad] = useState(false);
@@ -127,37 +141,38 @@ const App: React.FC<AppProps> = (props) => {
     }, [inViews]);
 
     useEffect(() => {
-        getDocsFromDb(db, "instructor", (list) => {
-            setInstructors(list.map(item => item.data));
-            const pd = list.map(item => item.data).map((inst: { [key: string]: string }) => {
-                return [inst.name, inst.plan_description];
-            });
-            setCourses(pd);
-        });
-        getDocFromDb(db, "contents", "siteinfo", (doc) => {
-            setAbout(doc.about);
-            setTitle(doc.title);
-            setPrivacyPolicy(doc.privacyPolicy);
-            document.title = doc.title;
-            document.querySelector('meta[name="description"]').setAttribute('content', doc.about);
-        });
-        getDocsFromDb(db, "plans", (list) => {
-            let p = {};
-            list.map(item => item.data).forEach((plan: { [key: string]: string | number }) => {
-                if (!Array.isArray(p[plan.instructor])) p[plan.instructor] = [];
-                p[plan.instructor].push({
-                    price: plan.price,
-                    text: plan.text,
-                });
-            });
-            //let orgn = doc.concat([doc.id]);
-            setPlansOrgn(list);
-            setPlans(p);
-        });
-        getDocsFromDb(db, "qanda", (list) => {
-            setQAndA(list);
-            setIsLoad(true);
-        });
+        const loadContent = async () => {
+            try {
+                const [setting, instructorList, courseList, planList, qandaList] = await Promise.all([
+                    fetchSetting(),
+                    fetchInstructors(),
+                    fetchCourses(),
+                    fetchPlans(),
+                    fetchQandA(),
+                ]);
+
+                if (setting) {
+                    setAbout(setting.about);
+                    setPrivacyPolicy(setting.privacy_policy);
+                    setPvUrl(setting.pv_url);
+                    setPlace(buildPlaceView(setting));
+                    setSns(buildSnsView(setting));
+                    setStudioJoin(buildStudioFee(setting.studio_join, "（初回・必要な場合のみ）", 700));
+                    setStudioPrice(buildStudioFee(setting.studio_price, "（1回あたり）", 360));
+                    document.querySelector('meta[name="description"]')?.setAttribute('content', setting.about);
+                }
+
+                setInstructors(instructorList);
+                setCourses(buildCourseViews(courseList, planList));
+                setQAndA(qandaList);
+            } catch (error) {
+                console.error("コンテンツの取得に失敗しました:", error);
+            } finally {
+                setIsLoad(true);
+            }
+        };
+
+        loadContent();
     }, []);
 
     const sections = [
@@ -167,20 +182,22 @@ const App: React.FC<AppProps> = (props) => {
             <img style={{ transform: "translate(-51%, -100%)" }} className="absolute-center w-mx-300 w-90" src="./img/top_logo.png" alt="novis" />
             <div className="absolute-center-x text-center top-70 font-m font-weight-100">
                 <span className='d-block mb-1'>Beatbox Lesson Studio</span><br />
-                <SNS />
+                <SNS sns={sns} />
             </div>
         </section>,
         <section key="video" ref={inViews[1][0]} className="video">
             <h2 ref={headingRefs["Video"]} style={{ opacity: 0, position: "absolute" }}></h2>
             <div className="iframe-169">
-                <iframe loading='lazy' width="560" height="315" src="https://www.youtube.com/embed/cG7MiBXO6QA" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                {pvUrl ? (
+                    <iframe loading='lazy' width="560" height="315" src={pvUrl} title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                ) : ""}
             </div>
         </section>,
         <About key="about" text={about} inViews={inViews[2]} />,
         <Instructor key="instructor" instructors={instructors} inViews={inViews[3]} />,
-        <Plan key="plan" course={courses} plans={plans} inViews={inViews[4]} />,
+        <Plan key="plan" courses={courses} studioJoin={studioJoin} studioPrice={studioPrice} inViews={inViews[4]} />,
         <Flow key="flow" inViews={inViews[5]} />,
-        <Place key="place" inViews={inViews[6]} />,
+        <Place key="place" place={place} inViews={inViews[6]} />,
         <QandA key="qanda" qanda={qAndA} inViews={inViews[7]} />,
         <Contact key="contact" privacyPolicy={privacyPolicy} inViews={inViews[8]} />,
     ];
@@ -198,12 +215,9 @@ const App: React.FC<AppProps> = (props) => {
                     <HeadingPositionContext.Provider value={headingPosition}>
                         <Background />
                     </HeadingPositionContext.Provider>
-                    <div className='text-center'><SNS /></div>
+                    <div className='text-center'><SNS sns={sns} /></div>
                     <div className='text-center'>©Novis 2022</div>
                 </Container>
-            </Route>
-            <Route exact path="/dashboard">
-                <Dashboard title={title} about={about} privacyPolicy={privacyPolicy} plans={plansOrgn} instructors={instructors} course={courses} qanda={qAndA} />
             </Route>
         </BrowserRouter>
     );

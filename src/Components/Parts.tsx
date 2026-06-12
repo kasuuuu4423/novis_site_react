@@ -173,10 +173,11 @@ export const AnchorNewTab: React.FC<AnchorNewTabProps> = (props) =>{
     return <a href={props.path} target="_blank" rel="noopener noreferrer">{props.content}</a>
 }
 
-export const SNS: React.FC = () =>{
+export const SNS: React.FC<{ sns?: { x?: string; instagram?: string; youtube?: string } }> = (props) =>{
+    const sns = props.sns;
     return <span>
-        <AnchorNewTab path="https://twitter.com/novis_guru" content={<i className="icon-circle mr-1 fa-brands fa-twitter"></i>}/>
-        <AnchorNewTab path="https://www.instagram.com/novis.guru/" content={<i className="icon-circle mr-1 fa-brands fa-instagram"></i>}/>
-        <AnchorNewTab path="https://www.youtube.com/channel/UCPTmcNcShZLvvL--aGE08nw" content={<i className="icon-circle fa-brands fa-youtube"></i>}/>
+        {sns?.x ? <AnchorNewTab path={sns.x} content={<i className="icon-circle mr-1 fa-brands fa-twitter"></i>}/> : ""}
+        {sns?.instagram ? <AnchorNewTab path={sns.instagram} content={<i className="icon-circle mr-1 fa-brands fa-instagram"></i>}/> : ""}
+        {sns?.youtube ? <AnchorNewTab path={sns.youtube} content={<i className="icon-circle fa-brands fa-youtube"></i>}/> : ""}
     </span>
 }

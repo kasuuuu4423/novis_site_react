@@ -11,10 +11,10 @@ type InstructorPersonProps = {
     name: string,
     imgPath: string,
     description: string,
-    twitterId: string,
-    instagramId: string,
-    youtube: string,
-    websiteUrl: string,
+    sns_x?: string,
+    sns_instagram?: string,
+    sns_youtube?: string,
+    website?: string,
 };
 
 const Text = styled.p`
@@ -98,30 +98,30 @@ const InstructorPerson: React.FC<InstructorPersonProps> = (props) =>{
                 </div>
                 <Scrollbar id={props.id} top={scrollbarTop} left={scrollbarLeft} scrollThumbTop={scrollPosition} boxHeight={descHeight} textHeight={textHeight}/>
                 <div className="sns">
-                        {props.twitterId?<div className="twitter">
+                        {props.sns_x ? <div className="twitter">
                             <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={"https://twitter.com/"+props.twitterId}>
+                            <a target="_blank" rel="noopener noreferrer" href={props.sns_x}>
                                 <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-brands fa-twitter"></i><span>Twitter</span></div>
                             </a>
-                        </div>:""}
-                        {props.instagramId?<div className="instagram">
+                        </div> : ""}
+                        {props.sns_instagram ? <div className="instagram">
                             <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={"https://www.instagram.com/"+props.instagramId}>
+                            <a target="_blank" rel="noopener noreferrer" href={props.sns_instagram}>
                                 <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-brands fa-instagram"></i><span>Instagram</span></div>
                             </a>
-                        </div>:""}
-                        {props.youtube?<div className="youtube">
+                        </div> : ""}
+                        {props.sns_youtube ? <div className="youtube">
                             <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={props.youtube}>
+                            <a target="_blank" rel="noopener noreferrer" href={props.sns_youtube}>
                                 <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-brands fa-youtube"></i><span>YouTube</span></div>
                             </a>
-                        </div>:""}
-                        {props.websiteUrl?<div className="website">
+                        </div> : ""}
+                        {props.website ? <div className="website">
                             <div className="empty"></div>
-                            <a target="_blank" rel="noopener noreferrer" href={props.websiteUrl}>
+                            <a target="_blank" rel="noopener noreferrer" href={props.website}>
                                 <div className="mb-1 icon-text flex-align-center"><i className="icon-circle mr-1 fa-solid fa-globe"></i><span>Website</span></div>
                             </a>
-                        </div>:""}
+                        </div> : ""}
                         <div style={{color: Colors.BLUE, textAlign: 'right',}}><Link smooth="easeInOutQuint" duration={scrollDuration} offset={-50} style={{cursor: "pointer"}} to={"plan_"+props.name}>{props.name}のレッスンコース→</Link></div>
                 </div>
             </div>

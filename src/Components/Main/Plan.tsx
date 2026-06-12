@@ -1,21 +1,18 @@
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import styled, {css} from "styled-components";
-import Colors from '../../Cssvars/Colors';
+import styled from "styled-components";
 import Mixin from '../../Cssvars/Mixin';
 import { SectionHeading, Heading3, RadiusBoxText, BracketText } from "../Parts";
 import { replaceAllReturns } from "../../Modules/functions";
+import { CourseView, StudioFeeView } from "../../Modules/Microcms";
 
 type PlanProps = {
     inViews: Array<any>,
-    course: Array<string>,
-    plans: {[key: string]: Array<{}>},
+    courses: CourseView[],
+    studioJoin: StudioFeeView,
+    studioPrice: StudioFeeView,
 };
 
-type PlanState = {};
-
 const Section = styled.section``;
-
 
 const WrapPrice = styled.div`
     display: flex;
@@ -28,7 +25,7 @@ type CourseProps = {
     id?: string,
     name: string,
     comment?: string,
-    plans?: Array<{[key: string]: string | number}>
+    plans?: Array<{ text: string; price: number }>,
     isSmall?: boolean,
     isMin?: boolean,
     isAnnotate?: boolean,
@@ -41,37 +38,32 @@ const Course: React.FC<CourseProps> = (props) =>{
             <Heading3 id={"plan_"+props.id}>{props.name} {props.isAnnotate?"*":""}</Heading3>
             {props.comment?<BracketText>{props.comment}</BracketText>:""}
             <WrapPrice>
-                {props.plans ? props.plans.map((plan, i)=><RadiusBoxText key={i}>{plan.text}¥{typeof plan.price == "number" ? plan.price.toLocaleString():parseInt(plan.price).toLocaleString()}{props.isMin?"~":""}</RadiusBoxText>):""}
+                {props.plans ? props.plans.map((plan, i)=><RadiusBoxText key={i}>{plan.text}¥{plan.price.toLocaleString()}{props.isMin?"~":""}</RadiusBoxText>):""}
             </WrapPrice>
         </div>
     );
 }
 
-class Plan extends React.Component<PlanProps, PlanState>{
-    constructor(props: PlanProps){
-        super(props);
-
-        this.state = {
-        };
-    }
-
-    render(){
-        const courses = this.props.course ? this.props.course.map((description)=>{return [description[0], replaceAllReturns(description[1])]}):[];
-        return (
-            <Section ref={this.props.inViews[0]} className="Plan">
-                <SectionHeading name="Plan" sub="コース" imgPath="./img/plan_h.png"/>
-                {courses != [] ? courses.map((course)=>{
-                    return <Course key={course[0]} id={course[0]} name={course[0] +" コース"} plans={this.props.plans[course[0]]} //singlePrice='8,000' monthlyPrice='30,000'
-                        comment={course[1]}/>
-                }):""}
-                <div className="mb-4"></div>
-                <div className="grid-2column-11">
-                    <Course key="スタジオ会員登録料" isSmall={true} name="スタジオ入会費" isAnnotate isMin plans={[{text: "（初回・必要な場合のみ）", price: 700}]}/>
-                    <Course key="スタジオ料金" isSmall={true} name="スタジオ料金" isAnnotate isMin plans={[{text: "（1回あたり）", price: 360}]}/>
-                </div>
-            </Section>
-        );
-    }
+const Plan: React.FC<PlanProps> = (props) => {
+    return (
+        <Section ref={props.inViews[0]} className="Plan">
+            <SectionHeading name="Plan" sub="コース" imgPath="./img/plan_h.png"/>
+            {props.courses.map((course) =>
+                <Course
+                    key={course.id}
+                    id={course.id}
+                    name={course.name + " コース"}
+                    plans={course.plans}
+                    comment={replaceAllReturns(course.description)}
+                />
+            )}
+            <div className="mb-4"></div>
+            <div className="grid-2column-11">
+                <Course key="studio-join" isSmall={true} name="スタジオ入会費" isAnnotate isMin plans={[{ text: props.studioJoin.text, price: props.studioJoin.price }]}/>
+                <Course key="studio-price" isSmall={true} name="スタジオ料金" isAnnotate isMin plans={[{ text: props.studioPrice.text, price: props.studioPrice.price }]}/>
+            </div>
+        </Section>
+    );
 }
 
 export default Plan;

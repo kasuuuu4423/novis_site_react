@@ -22,6 +22,8 @@ jobs:
           FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
           FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          VITE_MICROCMS_SERVICE_DOMAIN: ${{ secrets.VITE_MICROCMS_SERVICE_DOMAIN }}
+          VITE_MICROCMS_API_KEY: ${{ secrets.VITE_MICROCMS_API_KEY }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
