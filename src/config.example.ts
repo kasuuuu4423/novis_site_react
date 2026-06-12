@@ -1,9 +1,5 @@
-// Firebase コンソール > プロジェクトの設定 > マイアプリ から値を取得して設定してください。
-//
-// ローカルセットアップ:
-//   cp src/config.example.ts src/config.ts
-//
-// CI では FIREBASE_API_KEY などの環境変数から自動生成されます（scripts/ensure-config.js）。
+// 別プロジェクトで利用する場合のテンプレート。
+// ローカルセットアップ: cp src/config.example.ts src/config.ts
 
 export const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
